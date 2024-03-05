@@ -1,5 +1,10 @@
+hr.double {
+    border-top: 3px double;
+    border-bottom: none;
+}
+
 .navbar {
-    background-color: #F6F4F3 !important;
+    background-color: #F6F4F3 ;
     padding: 0 50px;
 }
 
@@ -7,7 +12,7 @@
     font-family: 'Roboto Mono', monospace;
     font-weight: medium;
     font-size: 2em;
-    color: #676767 !important;
+    color: #676767;
 }
 
 .container-fluid {
@@ -53,10 +58,36 @@ body {
     font-style: italic;
     color: #9ABCDB;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    justify-content: flex-start; 
+    flex-direction: row;
     text-align: center;
+}
+
+#taskContainer {
+    background-color: #C8DEF2;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    border: 2px solid #9ABCDB;
+}
+
+#dueTaskContainer {
+    background-color: #C8DEF2;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: auto; 
+    
+    border: 2px solid #9ABCDB;
+}
+
+.headerDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
 }
 
 #addTaskBtn {
@@ -67,7 +98,7 @@ body {
     cursor: pointer;
 }
 
-.card, .modal-content {
+.card, .modal-content, #taskContainer, #dueTaskContainer {
     border-radius: 10px; 
 }
 
