@@ -1,0 +1,109 @@
+.navbar {
+    background-color: #F6F4F3 !important;
+    padding: 0 50px;
+}
+
+.navbar-brand {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: medium;
+    font-size: 2em;
+    color: #676767 !important;
+}
+
+.container-fluid {
+    border-bottom: 2px solid #CDCDCD;
+    padding-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+
+.btn-outline-success {
+    color: #86654B;
+    border-color: #86654B;
+}
+
+.btn-outline-success:hover {
+    background-color: #86654B;
+    border-color: white;
+}
+
+body {
+    padding-top: 20px;
+    background-color: #F6F4F3;
+}
+
+.card {
+    background-color: #DDEFFF;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-header span {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5em;
+    font-weight: medium;
+    color: #9ABCDB;
+}
+
+.card-body p {
+    font-style: italic;
+    color: #9ABCDB;
+}
+
+#addTaskBtn {
+    background: none;
+    border: none;
+    color: #86654B;
+    font-style: italic;
+    cursor: pointer;
+}
+
+.card, .modal-content {
+    border-radius: 10px; 
+}
+
+.modal-title {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5em;
+    font-weight: semi-bold;
+    color: #7ba4cb;
+}
+
+.modal-content {
+    background-color: #C8DEF2;
+    color: #676767;
+}
+
+.modal-content input[type="text"] {
+    background-color: #F6F4F3;
+}
+
+#locationBtn {
+    background-color: transparent;
+    border: none;
+    color: #676767;
+}
+
+#locationBtn .fas {
+    color: #676767;
+}
+
+.btn-confirm {
+    background-color: #FFAE73;
+    color: white;
+    width: 150px;
+}
+
+.btn-cancel {
+    background-color: #86C3FC;
+    color: white;
+    width: 150px;
+}
+
+input[type="radio"]:checked {
+    background-color: #FFAE73;
+}
+
+
+
