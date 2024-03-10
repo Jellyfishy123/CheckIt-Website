@@ -1,0 +1,85 @@
+hr.double {
+    border-top: 3px double;
+    border-bottom: none;
+}
+
+.navbar {
+    background-color: #F6F4F3 ;
+    padding: 0 50px;
+}
+
+.navbar-brand {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: medium;
+    font-size: 2em;
+    color: #676767;
+}
+
+.container-fluid {
+    border-bottom: 2px solid #CDCDCD;
+    padding-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+
+body {
+    padding-top: 20px;
+    background-color: #F6F4F3;
+}
+
+#taskPageBtn {
+    height: 500px;
+    background-color: #DDEFFF;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px; 
+}
+
+#routePageBtn {
+    height: 500px;
+    background-color: #fcfcd2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px; 
+}
+
+#eventPageBtn {
+    height: 500px;
+    background-color: #d6fcd2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px; 
+}
+
+.card-header span {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5em;
+    font-weight: medium;
+    color: #9ABCDB;
+    
+}
+
+.card-body {
+    font-style: italic;
+    color: #9ABCDB;
+    display: flex;
+    justify-content: flex-start; 
+    flex-direction: row;
+    text-align: center;
+}
+
+.headerDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+}
+
+.card-text{
+    font-family: 'Roboto Mono', monospace;
+    font-weight: medium;
+    font-size: 2em;
+    color: #676767;
+}
+
+
+
