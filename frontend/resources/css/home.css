@@ -24,6 +24,16 @@ hr.double {
     width: 100%;
 }
 
+.btn-outline-success {
+    color: #86654B;
+    border-color: #86654B;
+}
+
+.btn-outline-success:hover {
+    background-color: #86654B;
+    border-color: white;
+}
+
 body {
     padding-top: 20px;
     background-color: #F6F4F3;
