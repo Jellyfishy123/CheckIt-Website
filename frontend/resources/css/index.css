@@ -4,7 +4,7 @@ hr.double {
 }
 
 .navbar {
-    background-color: #F6F4F3 ;
+    background-color: #F6F4F3;
     padding: 0 50px;
 }
 
@@ -40,7 +40,7 @@ body {
 }
 
 .card {
-    height: 500px;
+    height: fit-content;
     background-color: #DDEFFF;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
@@ -50,14 +50,14 @@ body {
     font-size: 1.5em;
     font-weight: medium;
     color: #9ABCDB;
-    
+
 }
 
 .card-body {
     font-style: italic;
     color: #9ABCDB;
     display: flex;
-    justify-content: flex-start; 
+    justify-content: flex-start;
     flex-direction: row;
     text-align: center;
 }
@@ -77,8 +77,8 @@ body {
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin-left: auto; 
-    
+    margin-left: auto;
+
     border: 2px solid #9ABCDB;
 }
 
@@ -86,7 +86,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
 }
 
 #addTaskBtn {
@@ -97,8 +97,11 @@ body {
     cursor: pointer;
 }
 
-.card, .modal-content, #taskContainer, #dueTaskContainer {
-    border-radius: 10px; 
+.card,
+.modal-content,
+#taskContainer,
+#dueTaskContainer {
+    border-radius: 10px;
 }
 
 .modal-title {
@@ -143,6 +146,3 @@ body {
 input[type="radio"]:checked {
     background-color: #FFAE73;
 }
-
-
-
