@@ -39,6 +39,10 @@ body {
     background-color: #F6F4F3;
 }
 
+#icon {
+    font-size: 175px;
+}
+
 #taskPageBtn {
     height: 500px;
     background-color: #DDEFFF;
