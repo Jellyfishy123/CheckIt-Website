@@ -90,7 +90,9 @@ function save(formType) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Redirect to home page after successful login
-                window.location.href = 'home.html';
+                // window.location.href = 'home.html';
+
+                console.log(userCredential.user)
             })
             .catch((error) => {
                 console.error("Error signing in:", error);
@@ -110,11 +112,9 @@ function save(formType) {
         }
 
         // Push user credentials to the database
-        database.ref('users').push({
-            username: username,
-            email: email,
-            password: password
-        }).then(() => {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+
             console.log('Data saved successfully!');
             // Clear input fields after submission
             document.getElementById('register-username').value = '';
@@ -122,9 +122,14 @@ function save(formType) {
             document.getElementById('register-password').value = '';
             // Redirect to the login page
             window.location.href = 'login.html';
-        }).catch(error => {
+
+            // Signed in 
+            var user = userCredential.user;
+            
+            // ...
+        })
+        .catch((error) => {
             console.error("Error saving data:", error);
-            // Handle database saving errors (e.g., display error message to user)
         });
     }
 }
