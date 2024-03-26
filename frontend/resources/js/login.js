@@ -3,9 +3,19 @@ const loginLink = document.querySelector('.login-link');
 const registerLink = document.querySelector('.register-link');
 const btnPopup = document.querySelector('.btnLogin-popup');
 const iconClose = document.querySelector('.icon-close');
+const loginClick = document.querySelector('.login-btn');
+const registerClick = document.querySelector('.register-btn');
 
 registerLink.addEventListener('click', () => {
     wrapper.classList.add('active');
+});
+
+loginClick.addEventListener('click', () => {
+    save('login');
+});
+
+registerClick.addEventListener('click', () => {
+    save('register');
 });
 
 loginLink.addEventListener('click', () => {
@@ -80,13 +90,14 @@ function save(formType) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Redirect to home page after successful login
-                window.location.href = 'http://127.0.0.1:5500';
+                window.location.href = 'home.html';
             })
             .catch((error) => {
                 console.error("Error signing in:", error);
                 // Handle authentication errors (e.g., display error message to user)
             });
     } else if (formType === 'register') {
+        console.log('register runs')
         username = document.getElementById('register-username').value;
         email = document.getElementById('register-email').value;
         password = document.getElementById('register-password').value;
@@ -110,7 +121,7 @@ function save(formType) {
             document.getElementById('register-email').value = '';
             document.getElementById('register-password').value = '';
             // Redirect to the login page
-            window.location.href = 'http://127.0.0.1:5500';
+            window.location.href = 'login.html';
         }).catch(error => {
             console.error("Error saving data:", error);
             // Handle database saving errors (e.g., display error message to user)
