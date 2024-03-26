@@ -90,9 +90,9 @@ function save(formType) {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Redirect to home page after successful login
-                // window.location.href = 'home.html';
+                window.location.href = 'home.html';
 
-                console.log(userCredential.user)
+                // console.log(userCredential.user)
             })
             .catch((error) => {
                 console.error("Error signing in:", error);
