@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckIT</title>
+    <link rel="stylesheet" href="./resources/css/routeManagement.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="logo">CHECKIT</div>
+            <ul>
+                <li>HOME</li>
+                <li>SIGNOUT</li>
+            </ul>
+        </nav>
+    </header>
+    
+    <!-- Task Selection View -->
+    <main id="task-selection-view">
+        <h1 class = "selector-header"><span>Select tasks to plan your route!</span></h1>
+        <div class="task-flex-container">
+            <div class="task-selector">
+                <div class="task-header">
+                    <label class="task-checkbox">
+                        <input type="checkbox" id="allTask" name="allTask">
+                        <span class="checkmark"></span>
+                        <h2>All Tasks</h2>
+                </div>
+                <div class="task-list" id="taskList">
+                    <!-- Dynamically generated tasks will be inserted here -->
+                </div>
+                <button id="confirm-btn">CONFIRM</button>
+            </div>
+            <p class="task-paragraph"><span>The tasks with a flexible time will be given an optimal time according to our algorithm.</span></p>
+        </div>
+    </main>
+    
+    
+    <!-- Itinerary View -->
+    <main id="itinerary-view" class="hidden">
+        <section id="itinerary">
+            <!-- This section will be populated with the itinerary items by JavaScript -->
+        </section>
+        <div id="controls">
+            <button id="view-route">VIEW ROUTE</button>
+            <button id="change-plan">CHANGE PLAN</button>
+        </div>
+        <div id = "route-details"></div>
+    </main>
+    
+    <script src="./resources/js/routeManagement.js"></script>
+</body>
+</html>

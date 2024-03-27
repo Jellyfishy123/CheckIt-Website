@@ -1,0 +1,377 @@
+/* Reset some default styles */
+body, h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+  }
+  
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
+    color: #333;
+  }
+  
+  header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10%;
+  }
+  
+  nav #logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  nav ul {
+    list-style: none;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin-left: 20px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  main {
+    padding-top: 60px; /* Give space for fixed header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #itinerary {
+    background-color:#C8DEF2;
+    padding: 20px;
+    width: 80%;
+    max-width: 1000px;
+    margin: 20px auto;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    position: relative;
+  }
+  
+  .event {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 15px 0;
+    margin-left: 0%;
+    margin-right: 0%;
+  }
+  
+  .trip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* Adjust the space between the elements as needed */
+  }
+
+  .transport-icon {
+    float: right;
+    width: 30px;
+  }
+  
+
+  .event:last-child {
+    border-bottom: none;
+  }
+  
+
+  .time {
+    font-size: 16px;
+    color: #555;
+    text-align: left;
+  }
+  
+  .description {
+    font-weight: bold;
+  }
+  
+  .travel-time {
+    background-color: #e6e6e6;
+    border-radius: 15px;
+    padding: 5px 15px;
+    font-size: 14px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    margin: 0%;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  #controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  #controls button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    color: white;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #controls button:hover {
+    background-color: #0056b3;
+  }
+  
+  #details {
+    width: 80%;
+    max-width: 1000px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+
+  /* Add responsive design */
+  @media screen and (max-width: 768px) {
+    nav {
+      padding: 0 5%;
+    }
+  
+  #itinerary {
+  width: 90%;
+  }
+  
+
+  .event {
+  flex-direction: column;
+  align-items: start;
+  }
+  
+  .description, .travel-time {
+  margin-top: 10px;
+  }
+  
+  #controls {
+  flex-direction: column;
+  }
+  
+  #controls button {
+  width: 100%;
+  margin-bottom: 10px;
+  }
+  }
+
+
+#task-selection-view {
+  background-color: #f2f9ff; /* Light blue background */
+  border-radius: 20px;
+  width: 80%;
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Main layout adjustments for task selection */
+.task-flex-container {
+  display: flex; /* Use flexbox to lay out children */
+  justify-content: space-between; /* Space between children */
+  align-items: flex-start; /* Align items to the start of the container */
+  padding: 20px;
+  width: 90%;
+}
+
+.task-header h2 {
+  margin-bottom: 20px;
+  font-size: 18px; /* Adjust the font-size as needed */
+  text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #FFFFFF; /* Bottom border for the header */
+}
+
+.task-selector {
+  background-color: #C8DEF2;; 
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 650px; /* Adjust the width as needed */
+  margin: auto 50px;
+}
+
+.task-paragraph {
+  flex-basis: 40%;
+  padding: 10px;
+  box-sizing: border-box; /* Include padding in the width calculation */
+  /* Additional styling as needed */
+  text-align: left; /* Align the text to the right */
+}
+
+.task-paragraph span {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.5em;
+  font-weight: medium;
+  color: #9ABCDB;
+  text-align: start;
+}
+
+/* Style for the task selection heading */
+
+.selector-header {
+  text-align: start;
+  font-size: 24px;
+  color: #333;
+  padding: 20px; /* Adjust as needed */
+  margin-top: 20px; /* Spacing from the top of the container */
+}
+
+.selector-header span {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.5em;
+  font-weight: medium;
+  color: #9ABCDB;
+  text-align: start;
+}
+
+
+/* Style for the task list */
+.task-list {
+  margin-bottom: 20px;
+}
+
+/* Style for custom checkboxes */
+.task-checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+
+/* When the checkbox is checked, show a blue background */
+.task-checkbox input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 9px;
+  top: 5px;
+  width: 7px;
+  height: 13px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Show the checkmark when checked */
+.task-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+
+/* Style the checkmark/indicator */
+.task-list label .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 7px;
+  height: 13px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Style for the confirm button */
+#confirm-btn {
+  background-color: #FFA500; /* Orange background for the button */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+  width: 50;
+  margin-left: auto; /* Center the button */
+  margin-right: auto; /* Center the button */
+  box-sizing: border-box;
+}
+
+#confirm-btn:hover {
+  background-color: #e69500; /* Darker shade of orange for hover effect */
+}
+
+/* Style for the paragraph under the button */
+.task-selector p {
+  font-size: 14px;
+  color: #666666;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.route-description {
+  display: flex;
+  justify-content: space-between; /* If you want space between them, or use 'flex-start' for no space */
+  align-items: center; /* Centers items vertically */
+  width: 100%; /* Full width of their parent */
+  max-width: 1000px; /* Adjust as needed */
+  margin-top: 20px;
+}
+
+.trip-details {
+  flex: 1; /* Each takes equal space */
+  display: flex; /* Use flex to center the image inside */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+.map-image, .trip-details-image {
+  max-width: 100%; /* Ensure the image is responsive and does not overflow its container */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Optional: Adds rounded corners to your images */
+}
