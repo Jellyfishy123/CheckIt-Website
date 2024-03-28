@@ -2,7 +2,7 @@ import { weatherAPIConfig } from '../models/weatherConfig.js';
 
 const getWeatherData = async () => {
     const apiKey = weatherAPIConfig.apiKey;
-    const city = 'Nairobi'; //testing with countries that are currently raining
+    const city = 'Singapore'; //testing with countries that are currently raining
 
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
