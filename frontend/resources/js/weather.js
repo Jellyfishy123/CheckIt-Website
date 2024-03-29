@@ -7,11 +7,16 @@ const showWeather = async () => {
     const isWeatherImpacted = weatherConditions.some(condition => weatherCondition.includes(condition));
     console.log(weatherCondition);
     
-    var imageShown = isWeatherImpacted ? "resources/images/tomorrow_rain.png" : "resources/images/tomorrow_sun.png";
-    return imageShown;
+    return isWeatherImpacted;
 }
 
-const currentWeather = await showWeather();
+const isWeatherImpacted = await showWeather();
+
+
+var imageShown = isWeatherImpacted ? "resources/images/tomorrow_rain.png" : "resources/images/tomorrow_sun.png";
+var textShown = isWeatherImpacted ? "Bring an umbrella!" : "Stay hydrated!";
 
 var weatherImg = document.getElementById('weatherImg');
-weatherImg.src = currentWeather;
+weatherImg.src = imageShown;
+var weatherText = document.getElementById('weatherText');
+weatherText.textContent = textShown;
