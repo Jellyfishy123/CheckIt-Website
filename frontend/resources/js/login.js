@@ -134,6 +134,29 @@ function save(formType) {
     }
 }
 
+// Update the login function to store authentication state in local storage
+firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        // Store authentication state in local storage
+        localStorage.setItem('user', JSON.stringify(userCredential.user));
+        // Redirect to home page after successful login
+        window.location.href = 'home.html';
+    })
+    .catch((error) => {
+        console.error("Error signing in:", error);
+        // Handle authentication errors (e.g., display error message to user)
+    });
+
+// Update the code to check for stored authentication state on page load
+window.addEventListener('load', () => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        // Redirect to home page if user is already authenticated
+        window.location.href = 'home.html';
+    }
+});
+
+
 
 
 
