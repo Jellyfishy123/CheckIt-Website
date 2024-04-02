@@ -146,3 +146,7 @@ body {
 input[type="radio"]:checked {
     background-color: #FFAE73;
 }
+
+#locationResults {
+    max-height: 200px;
+}

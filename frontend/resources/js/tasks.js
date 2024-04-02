@@ -2,15 +2,63 @@ import firebaseConfig from './models/firebaseConfig.js';
 import tasksService from './service/tasksService.js';
 import apiService from './service/weatherService.js';
 import weatherService from './service/weatherService.js';
+import LocationService from './service/locationService.js';
 
 let selectedTextContent = 'Today';
 let selectedNum = 0;
 
 document.querySelector("#newTaskStartDTButton").addEventListener("click", () => datepicker("#newTaskStartDT"));
 document.querySelector("#newTaskEndDTButton").addEventListener("click", () => datepicker("#newTaskEndDT"));
-document.getElementById('taskForm').addEventListener('submit', () => {
-    addTasks();
-    resetFormFields();
+document.getElementById('taskForm').addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent form submission by default
+
+    const startDT = document.querySelector("#newTaskStartDT").value;
+    const endDT = document.querySelector("#newTaskEndDT").value;
+
+    try {
+        if (validateDatesAndDisplayError(startDT, endDT) == true) {
+            addTasks();
+            resetFormFields();
+        } else {
+            throw new Error("Invalid dates");
+        }
+    } catch (error) {
+        console.error(`Validation error: ${error.message}`);
+        const errorMessage = document.querySelector("#errorMessage");
+        errorMessage.textContent = error.message;
+        errorMessage.style.display = "block";
+
+        console.log("task not added");
+    }
+});
+
+document.getElementById('newTaskLocation').addEventListener('input', function () {
+    const location = this.value;
+    LocationService.searchLocation(location)
+        .then(results => {
+            const resultsDiv = document.getElementById('locationResults');
+            resultsDiv.innerHTML = '';
+            if (results.length > 0) {
+                results.forEach(result => {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.textContent = result.ADDRESS;
+                    resultDiv.classList.add('list-group-item', 'list-group-item-action');
+                    resultDiv.addEventListener('click', function () {
+                        document.getElementById('newTaskLocation').value = this.textContent;
+                        resultsDiv.style.display = 'none';
+                    });
+                    resultsDiv.appendChild(resultDiv);
+                });
+                resultsDiv.classList.add('list-group');
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsDiv.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById('locationResults').style.display = 'none';
+        });
 });
 
 const datepicker = (id) => {
@@ -18,17 +66,37 @@ const datepicker = (id) => {
         enableTime: true,
         dateFormat: "Y-m-d H:i",
         allowInput: false,
-        clickOpens: false
+        clickOpens: false,
+        onChange: function (selectedDates, dateStr, instance) {
+            const startDT = document.querySelector("#newTaskStartDT").value;
+            const endDT = document.querySelector("#newTaskEndDT").value;
+            console.log(`Start date: ${startDT}, End date: ${endDT}`); // Debugging line
+            validateDatesAndDisplayError(startDT, endDT);
+        }
     }).open();
+}
+
+const validateDatesAndDisplayError = (startDT, endDT) => {
+    const errorMessage = document.querySelector("#errorMessage");
+    const startDate = flatpickr.parseDate(startDT, "Y-m-d H:i");
+    const endDate = flatpickr.parseDate(endDT, "Y-m-d H:i");
+
+    if (startDate > endDate) {
+        errorMessage.textContent = 'Warning ! Invalid date range';
+        errorMessage.style.display = "block";
+    } else {
+        errorMessage.style.display = "none";
+    }
 }
 
 const resetFormFields = () => {
     const form = document.getElementById('taskForm');
     const inputs = form.elements;
+    const errorMessage = document.querySelector("#errorMessage");
 
-    // Reset the form fields to their initial state
+    errorMessage.style.display = "none";
+
     for (let i = 0; i < inputs.length; i++) {
-        // submit and radio buttons value should not be reset
         if (inputs[i].type === 'submit' || inputs[i].type === 'radio') {
             inputs[i].disabled = false;
             continue;
@@ -315,7 +383,7 @@ const showWeather = async () => {
     weatherTextHeader.style.fontStyle = 'normal';
     weatherTextHeader.style.color = '#676767';
     weatherTextHeader.style.marginBottom = '0px';
-    
+
     currentWeatherContainer.appendChild(weatherTextHeader);
 
     const weathercontent = createDiv('d-flex align-items-center justify-content-center', 'weathercontent');
@@ -382,14 +450,17 @@ const showWeatherImpactedTasks = async (item) => {
         //change weatherimpactedtaskheader content to "No weather impacted tasks"
         const weatherImpactedTasksHeader = document.querySelector('text');
         weatherImpactedTasksHeader.textContent = 'No Weather Impacted Task(s)';
-        
+
     }
 
 }
 
 const showDueTasks = async (selectedNum) => {
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); //to compare only the date
+    currentDate.setHours(0, 0, 0, 0); 
+    console.log(currentDate.getDay());
+    
+    const remainingDays = 7 - currentDate.getDay();
 
     const dueTaskScrollContainer = document.getElementById('dueTaskScrollContainer');
 
@@ -404,10 +475,9 @@ const showDueTasks = async (selectedNum) => {
             dueinDays = -1;
         }
 
-        // Show tasks that are due today, tomorrow, this week, next week, or overdue
-        if ((dueinDays == selectedNum) ||
-            (selectedNum == 7 && dueinDays >= 0 && dueinDays < selectedNum) ||
-            (selectedNum == 14 && dueinDays >= 7 && dueinDays < selectedNum)) {
+        if ((selectedNum <= 1 && dueinDays == selectedNum) ||
+            (selectedNum == 7 && dueinDays >= 0 && dueinDays < remainingDays) ||
+            (selectedNum == 14 && dueinDays >= 7 && dueinDays < remainingDays + 7)) {
 
             const dueitemElement = createDiv('w-100 d-flex');
             const dueitemBox = createDiv('rounded w-100 p-2 mx-3 mt-3 position-relative');

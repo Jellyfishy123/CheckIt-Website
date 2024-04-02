@@ -4,17 +4,18 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto Mono', monospace;
 }
 
 body {
     display: flex;
     justify-content: left;
     align-items: center;
-    min-height: 100vh;
-    background: url('../images/CheckIt_Background.png') no-repeat;
-    /*background-size: cover;*/
-    background-position: center;
+    background-image: url('../images/CheckIt_Background.jpg');
+    background-size: cover; /* Add this line */
+    background-position: center; /* Add this line if you want to center the background image */
+    width: 100%;
+    height: 100vh;
 }
 
 header {
@@ -31,14 +32,14 @@ header {
 
 .logo {
     font-size: 2em;
-    color: lightblue;
+    color: #676767;
     user-select: none;
 }
 
 .navigation a {
     position: relative;
     font-size: 1.1em;
-    color: lightblue;
+    color: #86654B;
     text-decoration: none;
     font-weight: 500;
     margin-left: 40px;
@@ -51,7 +52,7 @@ header {
     bottom: -6px;
     width: 100%;
     height: 3px;
-    background: lightblue;
+    background: #86654B;
     border-radius: 5px;
     transform-origin: right;
     transform: scaleX(0);
@@ -67,20 +68,21 @@ header {
     width: 130px;
     height: 50px;
     background: transparent;
-    border: 2px solid lightblue;
+    border: 2px solid #86654B;
     outline: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 1.1em;
-    color: lightblue;
+    color: #86654B;
     font-weight: 500;
     margin-left: 40px;
     transition: .5s;
 }
 
 .navigation .btnLogin-popup:hover {
-    background: lightblue;
-    color: #162938;
+    background-color: #86654B;
+    border-color: white;
+    color: white;
 }
 
 .wrapper {
@@ -102,6 +104,8 @@ header {
 
 .wrapper.active-popup {
     transform: scale(1);
+    margin-left: 15%;
+    background-color: #f6f4f3;
 }
 
 .wrapper.active {

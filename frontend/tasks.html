@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="resources/css/index.css">
+    <link rel="stylesheet" href="resources/css/tasks.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
 
     <title>My Tasks</title>
@@ -20,7 +20,7 @@
     <nav class="navbar navbar-expand-lg ">
         <div class="container-fluid">
             <a class="navbar-brand" href="home.html">CHECKIT</a>
-            <button class="btn btn-outline-success">Sign Out</button>
+            <a class="btn btn-outline-success" href="login.html">Sign Out</a>
         </div>
         </div>
     </nav>
@@ -71,19 +71,17 @@
                             <input type="text" class="form-control" id="newTaskDescription" name="description">
                         </div>
                         <div class="mb-3">
+                            <i class="fas fa-map-marker-alt"></i>
                             <label for="newTaskLocation" class="form-label">Location: </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="newTaskLocation" readonly name="location">
-                                <div class="input-group-append">
-                                    <button id="locationBtn" class="btn btn-outline-secondary">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                    </button>
-                                </div>
+                                <input type="text" class="form-control" id="newTaskLocation" name="location">
+
                             </div>
+                            <div id="locationResults" class="list-group overflow-auto"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-4 col-sm-6">
+                            <div class="col-lg-4 col-sm-6 ">
                                 <div class="mb-3">
                                     <label for="newTaskStartDT" class="form-label">Start By: </label>
                                     <div class="input-group">
@@ -105,9 +103,12 @@
                                         <button type="button" class="input-group-text" id="newTaskEndDTButton">
                                             <i class="bi bi-calendar"></i>
                                         </button>
+
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="mb-3" id="errorMessage" style="display: none; color: #d97d71;"></div>
                         </div>
 
                         <div class="row">
@@ -131,7 +132,6 @@
                             <input type="submit" class="btn btn-confirm" value="Confirm" data-bs-dismiss="modal">
                             <button onclick="resetFormFields()" type="button" class="btn btn-cancel"
                                 data-bs-dismiss="modal">Cancel</button>
-
                         </div>
                     </form>
                 </div>
@@ -156,6 +156,12 @@
         <script type="module" src="resources/js/tasks.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+
 </body>
 
 </html>

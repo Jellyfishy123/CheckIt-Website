@@ -5,6 +5,6 @@ import firebaseConfig from "./firebaseConfig.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const auth = getAuth()
+// const auth = getAuth()
 
 export default db;
