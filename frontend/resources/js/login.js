@@ -1,3 +1,7 @@
+// login.js
+
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from './loginService.js';
+
 const wrapper = document.querySelector('.wrapper');
 const loginLink = document.querySelector('.login-link');
 const registerLink = document.querySelector('.register-link');
@@ -30,15 +34,6 @@ iconClose.addEventListener('click', () => {
     wrapper.classList.remove('active-popup');
     wrapper.classList.remove('active');
 });
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-import firebaseConfig from './models/firebaseConfig.js';
-console.log(firebaseConfig)
-
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
 
 function showMessage(message) {
     const alertElement = document.createElement('div');
@@ -81,77 +76,46 @@ function save(formType) {
         password = document.getElementById('login-password').value;
 
         if (!email || !password) {
-            // Display error message to user
             showMessage("Please fill out all fields");
-            return; // Stop execution if any field is empty
+            return;
         }
 
-        // Authenticate user with Firebase Authentication
-        firebase.auth().signInWithEmailAndPassword(email, password)
+        signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                // Redirect to home page after successful login
                 window.location.href = 'home.html';
-
-                // console.log(userCredential.user)
             })
             .catch((error) => {
                 console.error("Error signing in:", error);
-                // Handle authentication errors (e.g., display error message to user)
             });
     } else if (formType === 'register') {
-        console.log('register runs')
         username = document.getElementById('register-username').value;
         email = document.getElementById('register-email').value;
         password = document.getElementById('register-password').value;
 
-         // Check if any of the fields are empty
         if (!username || !email || !password) {
-            // Display error message to user
             showMessage("Please fill out all fields");
-            return; // Stop execution if any field is empty
+            return;
         }
 
-        // Push user credentials to the database
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-
-            console.log('Data saved successfully!');
-            // Clear input fields after submission
-            document.getElementById('register-username').value = '';
-            document.getElementById('register-email').value = '';
-            document.getElementById('register-password').value = '';
-            // Redirect to the login page
-            window.location.href = 'login.html';
-
-            // Signed in 
-            var user = userCredential.user;
-            
-            // ...
-        })
-        .catch((error) => {
-            console.error("Error saving data:", error);
-        });
+        createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                console.log('Data saved successfully!');
+                document.getElementById('register-username').value = '';
+                document.getElementById('register-email').value = '';
+                document.getElementById('register-password').value = '';
+                window.location.href = 'login.html';
+            })
+            .catch((error) => {
+                console.error("Error saving data:", error);
+            });
     }
 }
 
-// Update the login function to store authentication state in local storage
-firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-        // Store authentication state in local storage
-        localStorage.setItem('user', JSON.stringify(userCredential.user));
-        // Redirect to home page after successful login
-        window.location.href = 'home.html';
-    })
-    .catch((error) => {
-        console.error("Error signing in:", error);
-        // Handle authentication errors (e.g., display error message to user)
-    });
-
-// Update the code to check for stored authentication state on page load
 window.addEventListener('load', () => {
+    // Code to check for stored authentication state
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-        // Redirect to home page if user is already authenticated
+        // User is authenticated, redirect to home page
         window.location.href = 'home.html';
     }
 });
