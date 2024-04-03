@@ -102,23 +102,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
 
+    
+
     // Additional functionality for showing trip details and navigating through trips
     // isEvent, showTripDetails, viewRouteButton, nextTripButton, previousTripButton event listeners
     viewRouteButton.addEventListener('click', () => {
-        let content = '';
-        content += `
+        // Create a container for the map and directions panel
+        let content = `
             <div class="route-description">
-                <div class="map-container">
-                    <img class="map-image" src="./resources/images/map1.jpg">
-                </div>
-                <div class="trip-details">
-                    <img class="trip-details-image" src="./resources/images/tripDetails1.jpg">
-                </div>
+                <div id="dynamicMapContainer" class="map-container" style="width: 600px; height: 450px;"></div>
+                <div id="dynamicDirectionsPanel" class="directions-panel"></div>
             </div>
-    
         `;
         routeDetailsSection.innerHTML = content;
+    
+        // Now, initialize the map and directions renderer
+        initDynamicMap();
     });
+    
+    function initDynamicMap() {
+    const map = new google.maps.Map(document.getElementById("dynamicMapContainer"), {
+        zoom: 12, // Adjust zoom level as needed for best view
+        center: { lat: 1.3483, lng: 103.6831 }, // Center map based on general Singapore area or specific route
+        disableDefaultUI: true,
+    });
+    
+    const directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+    directionsRenderer.setPanel(document.getElementById("dynamicDirectionsPanel"));
+
+    // Use addresses for Nanyang Technological University and Changi Airport
+    const start = 'Nanyang Technological University, Singapore';
+    const end = 'Changi Airport, Singapore';
+    calculateAndDisplayRoute(directionsRenderer, start, end);
+}
+
+    
+    function calculateAndDisplayRoute(directionsRenderer, start, end) {
+        const directionsService = new google.maps.DirectionsService();
+        directionsService.route({
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING,
+        }, (response, status) => {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsRenderer.setDirections(response);
+            } else {
+                window.alert('Directions request failed due to ' + status);
+            }
+        });
+    }
+    
 
     generateTaskCheckboxes();
 });
