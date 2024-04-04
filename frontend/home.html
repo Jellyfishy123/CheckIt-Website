@@ -23,9 +23,11 @@
 <body>
     <nav class="navbar navbar-expand-lg ">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">CHECKIT</a>
-            <a class="navbar-brand" href="../frontend/faq.html">FAQs</a>
-            <a class="btn btn-outline-success" href="login.html" onclick="localStorage.removeItem('user')">Sign Out</a>
+            <a class="navbar-brand" href="home.html">CHECKIT</a>
+            <nav class="navigation">
+                <a class="faq-btn" href="faq.html">FAQs</a>
+                <button class="signout-button" onclick="localStorage.removeItem('user'); localStorage.removeItem('userId'); window.location.href='login.html';">SignOut</button>
+            </nav>
         </div>
         </div>
     </nav>

@@ -12,28 +12,32 @@ body {
     justify-content: left;
     align-items: center;
     background-image: url('../images/CheckIt_Background.jpg');
-    background-size: cover; /* Add this line */
-    background-position: center; /* Add this line if you want to center the background image */
+    background-size: cover;
+    /* Add this line */
+    background-position: center;
+    /* Add this line if you want to center the background image */
     width: 100%;
     height: 100vh;
 }
 
-header {
+.container-fluid {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     padding: 20px 100px;
-    display: flex;
+    padding-bottom: 10px;
     justify-content: space-between;
     align-items: center;
-    z-index: 99;
+    display: flex;
+    width: 100%;
 }
 
-.logo {
+.navbar-brand {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: medium;
     font-size: 2em;
     color: #676767;
-    user-select: none;
 }
 
 .navigation a {
