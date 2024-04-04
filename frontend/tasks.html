@@ -20,7 +20,7 @@
     <nav class="navbar navbar-expand-lg ">
         <div class="container-fluid">
             <a class="navbar-brand" href="home.html">CHECKIT</a>
-            <a class="btn btn-outline-success" href="login.html">Sign Out</a>
+            <a class="btn btn-outline-success" href="login.html" onclick="localStorage.removeItem('user')">Sign Out</a>
         </div>
         </div>
     </nav>
@@ -60,7 +60,7 @@
                     <form onsubmit="event.preventDefault()" id="taskForm">
 
                         <div class="row mb-3">
-                            <label for="newTaskTitle" class="d-inline">Title: </label>
+                            <label for="newTaskTitle" class="d-inline"> <span class="required">*</span> Title: </label>
                             <div class="d-inline">
                                 <input type="text" class="form-control" id="newTaskTitle" name="title">
                             </div>
@@ -83,7 +83,7 @@
                         <div class="row">
                             <div class="col-lg-4 col-sm-6 ">
                                 <div class="mb-3">
-                                    <label for="newTaskStartDT" class="form-label">Start By: </label>
+                                    <label for="newTaskStartDT" class="form-label"> <span class="required">*</span> Start By: </label>
                                     <div class="input-group">
                                         <input type="text" class="form-control datetimepicker" id="newTaskStartDT"
                                             name="startDT" readonly>
@@ -96,7 +96,7 @@
 
                             <div class="col-lg-4 col-sm-6">
                                 <div class="mb-3">
-                                    <label for="newTaskEndDT" class="form-label">End By: </label>
+                                    <label for="newTaskEndDT" class="form-label"><span class="required">*</span> End By: </label>
                                     <div class="input-group">
                                         <input type="text" class="form-control datetimepicker" id="newTaskEndDT"
                                             name="endDT" readonly>
@@ -129,7 +129,7 @@
                         </div>
 
                         <div class="modal-footer">
-                            <input type="submit" class="btn btn-confirm" value="Confirm" data-bs-dismiss="modal">
+                            <input type="submit" class="btn btn-confirm" value="Confirm">
                             <button onclick="resetFormFields()" type="button" class="btn btn-cancel"
                                 data-bs-dismiss="modal">Cancel</button>
                         </div>
@@ -138,18 +138,10 @@
             </div>
         </div>
 
-        <!-- Optional JavaScript; choose one of the two! -->
-
-        <!-- Option 1: Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-        <!-- Option 2: Separate Popper and Bootstrap JS -->
-        <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
@@ -160,7 +152,7 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        
+
 
 </body>
 

@@ -1,6 +1,5 @@
 // login.js
-
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from './loginService.js';
+import loginService from './service/loginService.js';
 
 const wrapper = document.querySelector('.wrapper');
 const loginLink = document.querySelector('.login-link');
@@ -11,6 +10,7 @@ const loginClick = document.querySelector('.login-btn');
 const registerClick = document.querySelector('.register-btn');
 
 registerLink.addEventListener('click', () => {
+    clearMessage('login-msg')
     wrapper.classList.add('active');
 });
 
@@ -23,6 +23,8 @@ registerClick.addEventListener('click', () => {
 });
 
 loginLink.addEventListener('click', () => {
+    clearMessage('register-msg')
+    registerform.reset();
     wrapper.classList.remove('active');
 });
 
@@ -30,44 +32,39 @@ btnPopup.addEventListener('click', () => {
     wrapper.classList.add('active-popup');
 });
 
+const loginform = document.getElementById('loginForm');
+const registerform = document.getElementById('registerForm');
+
 iconClose.addEventListener('click', () => {
     wrapper.classList.remove('active-popup');
     wrapper.classList.remove('active');
+    loginform.reset();
+    registerform.reset();
+
+    const loginErrorDiv = document.getElementById('login-msg');
+    loginErrorDiv.style.display = 'none';
+
+    const registerErrorDiv = document.getElementById('register-msg');
+    registerErrorDiv.style.display = 'none';
 });
 
-function showMessage(message) {
-    const alertElement = document.createElement('div');
-    alertElement.className = 'alert';
-    alertElement.textContent = message;
-    alertElement.style.color = 'red'; // Set color to red
-    alertElement.style.position = 'absolute';
-    alertElement.style.top = 'auto';
-    alertElement.style.left = 'auto';
-    alertElement.style.width = '20%';
-    alertElement.style.height = '20%';
-    alertElement.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black overlay
-    alertElement.style.display = 'flex';
-    alertElement.style.justifyContent = 'center';
-    alertElement.style.alignItems = 'center';
-    alertElement.style.zIndex = '9999';
-
-    const messageElement = document.createElement('span');
-    messageElement.textContent = message;
-    messageElement.style.padding = '20px';
-    messageElement.style.backgroundColor = 'white'; // White background for the message
-    messageElement.style.borderRadius = '5px';
-
-    //alertElement.appendChild(messageElement);
-
-    // Add the alert to the DOM
-    document.body.appendChild(alertElement);
-
-    // Remove the alert after a certain duration (e.g., 5 seconds)
-    setTimeout(() => {
-        alertElement.remove();
-    }, 1000); // 5000 milliseconds = 1 seconds
+function clearMessage(id) {
+    const messageDiv = document.getElementById(id);
+    messageDiv.style.display = 'none';
+    messageDiv.textContent = '';
 }
 
+function showMessage(message, id, color) {
+    const showMessageDiv = document.getElementById(id);
+    clearMessage(id);
+
+    //display the new message
+    showMessageDiv.textContent = message;
+    showMessageDiv.style.color = color;
+    showMessageDiv.style.display = 'block';
+    console.log("Error message displayed: ", message);
+
+}
 
 function save(formType) {
     let email, password, username;
@@ -76,36 +73,47 @@ function save(formType) {
         password = document.getElementById('login-password').value;
 
         if (!email || !password) {
-            showMessage("Please fill out all fields");
+            showMessage("Please fill out all fields", 'login-msg',"#d97d71");
             return;
         }
-
-        signInWithEmailAndPassword(email, password)
+        
+        loginService.signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
+                localStorage.setItem('user', JSON.stringify(userCredential.user));
+                localStorage.setItem('userId', userCredential.user.uid);    
                 window.location.href = 'home.html';
             })
             .catch((error) => {
+                showMessage("Invalid email or password", 'login-msg',"#d97d71");
                 console.error("Error signing in:", error);
             });
+
     } else if (formType === 'register') {
         username = document.getElementById('register-username').value;
         email = document.getElementById('register-email').value;
         password = document.getElementById('register-password').value;
 
         if (!username || !email || !password) {
-            showMessage("Please fill out all fields");
+            showMessage("Please fill out all fields", 'register-msg',"#d97d71");
             return;
         }
 
-        createUserWithEmailAndPassword(email, password)
+        //check if checkbox is checked
+        if (!document.getElementById('terms').checked) {
+            showMessage("Please agree to terms and conditions", 'register-msg',"#d97d71");
+            return;
+        }
+
+        loginService.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 console.log('Data saved successfully!');
                 document.getElementById('register-username').value = '';
                 document.getElementById('register-email').value = '';
                 document.getElementById('register-password').value = '';
-                window.location.href = 'login.html';
+                showMessage("Registration successful. Proceed to Login", 'register-msg',"#62bd76"); 
             })
             .catch((error) => {
+                showMessage("Email already in use", 'register-msg',"#d97d71");
                 console.error("Error saving data:", error);
             });
     }

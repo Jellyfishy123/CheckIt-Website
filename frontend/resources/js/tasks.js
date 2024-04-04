@@ -10,17 +10,21 @@ let selectedNum = 0;
 document.querySelector("#newTaskStartDTButton").addEventListener("click", () => datepicker("#newTaskStartDT"));
 document.querySelector("#newTaskEndDTButton").addEventListener("click", () => datepicker("#newTaskEndDT"));
 document.getElementById('taskForm').addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevent form submission by default
-
     const startDT = document.querySelector("#newTaskStartDT").value;
     const endDT = document.querySelector("#newTaskEndDT").value;
 
+    const title = document.querySelector("#newTaskTitle").value;
+
     try {
-        if (validateDatesAndDisplayError(startDT, endDT) == true) {
+        if (!title || !startDT || !endDT) {
+            throw new Error("Please fill in all required fields (*).");
+        }
+        if (validateDatesAndDisplayError(startDT, endDT)) {
             addTasks();
+            $('#staticBackdrop').modal('hide');
             resetFormFields();
         } else {
-            throw new Error("Invalid dates");
+            throw new Error("Please enter a valid date range.");
         }
     } catch (error) {
         console.error(`Validation error: ${error.message}`);
@@ -28,7 +32,7 @@ document.getElementById('taskForm').addEventListener('submit', (event) => {
         errorMessage.textContent = error.message;
         errorMessage.style.display = "block";
 
-        console.log("task not added");
+        // console.log("task not added"); //for debugging
     }
 });
 
@@ -70,7 +74,7 @@ const datepicker = (id) => {
         onChange: function (selectedDates, dateStr, instance) {
             const startDT = document.querySelector("#newTaskStartDT").value;
             const endDT = document.querySelector("#newTaskEndDT").value;
-            console.log(`Start date: ${startDT}, End date: ${endDT}`); // Debugging line
+            // console.log(`Start date: ${startDT}, End date: ${endDT}`); // Debugging line
             validateDatesAndDisplayError(startDT, endDT);
         }
     }).open();
@@ -80,13 +84,22 @@ const validateDatesAndDisplayError = (startDT, endDT) => {
     const errorMessage = document.querySelector("#errorMessage");
     const startDate = flatpickr.parseDate(startDT, "Y-m-d H:i");
     const endDate = flatpickr.parseDate(endDT, "Y-m-d H:i");
+    const currentDate = new Date();
 
     if (startDate > endDate) {
-        errorMessage.textContent = 'Warning ! Invalid date range';
+        errorMessage.textContent = 'End date cannot be before start date';
         errorMessage.style.display = "block";
-    } else {
-        errorMessage.style.display = "none";
+        return false;
     }
+
+    if (endDate < currentDate) {
+        errorMessage.textContent = 'End date cannot be in the past';
+        errorMessage.style.display = "block";
+        return false;
+    }
+
+    errorMessage.style.display = "none";
+    return true;
 }
 
 const resetFormFields = () => {
@@ -106,16 +119,6 @@ const resetFormFields = () => {
     }
 }
 
-const updateMasterCheckbox = () => {
-    const scrollContainer = document.getElementById('scrollContainer');
-    const allCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]');
-    const selectedCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]:checked');
-    document.getElementById('selectAll').checked = allCheckboxes.length == selectedCheckboxes.length;
-};
-
-// Items array
-let items = [];
-
 const priorityOptions = {
     'unassigned': '#f5f5f5',
     'low': '#A4E8B3',
@@ -124,23 +127,28 @@ const priorityOptions = {
 };
 
 const getCurrentUserId = () => {
-    // return firebase.auth().currentUser.uid;
-    return '1';//for testing purposes
+    return localStorage.getItem('userId');
 }
 
-//Helper function
 const createDiv = (className, id) => {
     const div = document.createElement('div');
     div.className = className;
     if (id) div.id = id;
     return div;
 }
-
+const updateMasterCheckbox = () => {
+    const scrollContainer = document.getElementById('scrollContainer');
+    const allCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]');
+    const selectedCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]:checked');
+    document.getElementById('selectAll').checked = allCheckboxes.length == selectedCheckboxes.length;
+};
+// Items array
+let items = [];
 const showTasks = async () => {
     items = await tasksService.getAllTasks();
 
     const uid = getCurrentUserId();
-    items = items.filter(item => item.userID === uid);
+    items = items.filter(item => item.userID == uid);
 
     const cardContent = document.getElementById('card-body');
     cardContent.style.height = " 700px";
@@ -199,7 +207,6 @@ const showTasks = async () => {
     const scrollContainer = createDiv('w-100 m-3 overflow-auto pe-3', 'scrollContainer');
     scrollContainer.style.height = '450px';
 
-    //Create each Todo item
     items.forEach((item) => {
         const itemElement = createDiv('w-100 d-flex');
 
@@ -457,9 +464,8 @@ const showWeatherImpactedTasks = async (item) => {
 
 const showDueTasks = async (selectedNum) => {
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); 
-    console.log(currentDate.getDay());
-    
+    currentDate.setHours(0, 0, 0, 0);
+
     const remainingDays = 7 - currentDate.getDay();
 
     const dueTaskScrollContainer = document.getElementById('dueTaskScrollContainer');
@@ -476,8 +482,10 @@ const showDueTasks = async (selectedNum) => {
         }
 
         if ((selectedNum <= 1 && dueinDays == selectedNum) ||
-            (selectedNum == 7 && dueinDays >= 0 && dueinDays < remainingDays) ||
-            (selectedNum == 14 && dueinDays >= 7 && dueinDays < remainingDays + 7)) {
+            (selectedNum == 7 && dueinDays >= 0 && dueinDays <= remainingDays) ||
+            (selectedNum == 14 && dueinDays >= remainingDays && dueinDays <= remainingDays + 7)) {
+
+            console.log(dueinDays,remainingDays);
 
             const dueitemElement = createDiv('w-100 d-flex');
             const dueitemBox = createDiv('rounded w-100 p-2 mx-3 mt-3 position-relative');
@@ -555,8 +563,8 @@ const viewDetailedTasks = (task) => {
 }
 
 const addTasks = () => {
-
     const uid = getCurrentUserId();
+
     const header = document.getElementById('newTaskLabel');
     header.textContent = 'New Task';
 
@@ -571,7 +579,6 @@ const addTasks = () => {
         taskObj[input.name] = input.value;
     });
 
-    //add userID to taskObj
     taskObj.userID = uid;
 
     console.log(taskObj);
@@ -605,7 +612,31 @@ const editTaskView = (task) => {
         }
     }
 
-    $('#confirmButton').on('click', () => confirmEditTasks(task));
+    $('#confirmButton').on('click', () => {
+        const startDT = document.querySelector("#newTaskStartDT").value;
+        const endDT = document.querySelector("#newTaskEndDT").value;
+
+        const title = document.querySelector("#newTaskTitle").value;
+
+        try {
+            if (!title || !startDT || !endDT) {
+                throw new Error("Please fill in all required fields (*).");
+            }
+            if (validateDatesAndDisplayError(startDT, endDT)) {
+                confirmEditTasks(task);
+            } else {
+                throw new Error("Please enter a valid date range.");
+            }
+        } catch (error) {
+
+            console.error(`Validation error: ${error.message}`);
+            const errorMessage = document.querySelector("#errorMessage");
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = "block";
+
+            console.log("task not edited"); //for debugging
+        }
+    });
     $('#cancelButton').on('click', () => {
         viewDetailedTasks(task);
     });
