@@ -6,17 +6,15 @@ const showWeather = async () => {
     const weatherConditions = ['light rain', 'moderate rain', 'rain', 'shower rain', 'thunderstorm'];
     const isWeatherImpacted = weatherConditions.some(condition => weatherCondition.includes(condition));
     console.log(weatherCondition);
+
+    var textShown = isWeatherImpacted ? "Bring an umbrella!" : "Go out and have fun!";
+
+    var weatherImg = document.getElementById('weatherImg');
+    weatherImg.src = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
+    var weatherText = document.getElementById('weatherText');
+    weatherText.textContent = textShown;
     
     return isWeatherImpacted;
 }
 
-const isWeatherImpacted = await showWeather();
-
-
-var imageShown = isWeatherImpacted ? "resources/images/tomorrow_rain.png" : "resources/images/tomorrow_sun.png";
-var textShown = isWeatherImpacted ? "Bring an umbrella!" : "Stay hydrated!";
-
-var weatherImg = document.getElementById('weatherImg');
-weatherImg.src = imageShown;
-var weatherText = document.getElementById('weatherText');
-weatherText.textContent = textShown;
+const currentWeatherContainer = await showWeather();

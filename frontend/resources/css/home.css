@@ -39,7 +39,7 @@ body {
     background-color: #F6F4F3;
 }
 
-#icon {
+#icon{
     font-size: 175px;
 }
 
@@ -97,7 +97,13 @@ body {
 }
 
 #weatherText{
-    font-size: 1em;
+    font-size: 1.25em;
+    text-align: center;
+    font-weight: normal;
+}
+
+#weatherImg {
+
 }
 
 
