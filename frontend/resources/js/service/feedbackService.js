@@ -1,7 +1,7 @@
 import { ref, get, set, push, child, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-import db from '../models/firebase.js';
+import firebase from '../models/firebase.js';
 
-const feedbackRef = ref(db, 'feedbacks');
+const feedbackRef = ref(firebase.db, 'feedbacks');
 
 const getAllFeedbacks = async () => {
     const items = [];

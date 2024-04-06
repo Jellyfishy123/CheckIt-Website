@@ -1,14 +1,13 @@
 import firebaseConfig from './models/firebaseConfig.js';
 import feedbackService from './service/feedbackService.js';
 
-document.getElementById('taskForm').addEventListener('submit', () => {
+document.getElementById('feedbackForm').addEventListener('submit', () => {
     addFeedback();
     resetFormFields();
 });
 
 const getCurrentUserId = () => {
-    // return firebase.auth().currentUser.uid;
-    return '1';//for testing purposes
+    return localStorage.getItem('userId');
 }
 
 const addFeedback = () => {
@@ -16,7 +15,7 @@ const addFeedback = () => {
 
     const interestedInputs = [];
     const form = document.getElementById('feedbackForm');
-    interestedInputs.push(...form.querySelector('#newFeedback'));
+    interestedInputs.push(form.querySelector('#newFeedback'));
 
     const feedbackObj = {};
 
@@ -29,4 +28,12 @@ const addFeedback = () => {
 
     console.log(feedbackObj);
     feedbackService.addFeedback(feedbackObj);
+}
+
+const resetFormFields = () => {
+    const form = document.getElementById('feedbackForm');
+    const errorMessage = document.querySelector("#errorMessage");
+    const feedbackTextarea = document.querySelector("#newFeedback");
+
+    feedbackTextarea.value = '';
 }
