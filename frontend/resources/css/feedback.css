@@ -15,6 +15,27 @@ hr.double {
     color: #676767;
 }
 
+.navigation .signout-button {
+    width: 130px;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #86654B;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #86654B;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+
+.navigation .signout-button:hover {
+    background-color: #86654B;
+    border-color: white;
+    color: white;
+}
+
 .container-fluid {
     border-bottom: 2px solid #CDCDCD;
     padding-bottom: 10px;
