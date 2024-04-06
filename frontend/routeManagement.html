@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CheckIT</title>
     <link rel="stylesheet" href="./resources/css/routeManagement.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="resources/css/tasks.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div id="logo">CHECKIT</div>
-            <ul>
-                <li>HOME</li>
-                <li>SIGNOUT</li>
-            </ul>
-        </nav>
-    </header>
-    
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="home.html">CHECKIT</a>
+            <a class="btn btn-outline-success" href="login.html" onclick="localStorage.removeItem('user')">Sign Out</a>
+        </div>
+        </div>
+    </nav>
+
     <!-- Task Selection View -->
     <main id="task-selection-view">
-        <h1 class = "selector-header"><span>Select tasks to plan your route!</span></h1>
+        <h1 class="selector-header"><span>Select tasks to plan your route!</span></h1>
         <div class="task-flex-container">
             <div class="task-selector">
                 <div class="task-header">
@@ -33,11 +39,12 @@
                 </div>
                 <button id="confirm-btn">CONFIRM</button>
             </div>
-            <p class="task-paragraph"><span>The tasks with a flexible time will be given an optimal time according to our algorithm.</span></p>
+            <p class="task-paragraph"><span>The tasks with a flexible time will be given an optimal time according to
+                    our algorithm.</span></p>
         </div>
     </main>
-    
-    
+
+
     <!-- Itinerary View -->
     <main id="itinerary-view" class="hidden">
         <section id="itinerary">
@@ -47,9 +54,10 @@
             <button id="view-route">VIEW ROUTE</button>
             <button id="change-plan">CHANGE PLAN</button>
         </div>
-        <div id = "route-details"></div>
+        <div id="route-details"></div>
     </main>
-    
+
     <script src="./resources/js/routeManagement.js"></script>
 </body>
+
 </html>

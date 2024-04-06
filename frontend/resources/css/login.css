@@ -4,41 +4,46 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto Mono', monospace;
 }
 
 body {
     display: flex;
     justify-content: left;
     align-items: center;
-    min-height: 100vh;
-    background: url('../images/CheckIt_Background.png') no-repeat;
-    /*background-size: cover;*/
+    background-image: url('../images/CheckIt_Background.jpg');
+    background-size: cover;
+    /* Add this line */
     background-position: center;
+    /* Add this line if you want to center the background image */
+    width: 100%;
+    height: 100vh;
 }
 
-header {
+.container-fluid {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     padding: 20px 100px;
-    display: flex;
+    padding-bottom: 10px;
     justify-content: space-between;
     align-items: center;
-    z-index: 99;
+    display: flex;
+    width: 100%;
 }
 
-.logo {
+.navbar-brand {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: medium;
     font-size: 2em;
-    color: lightblue;
-    user-select: none;
+    color: #676767;
 }
 
 .navigation a {
     position: relative;
     font-size: 1.1em;
-    color: lightblue;
+    color: #86654B;
     text-decoration: none;
     font-weight: 500;
     margin-left: 40px;
@@ -51,7 +56,7 @@ header {
     bottom: -6px;
     width: 100%;
     height: 3px;
-    background: lightblue;
+    background: #86654B;
     border-radius: 5px;
     transform-origin: right;
     transform: scaleX(0);
@@ -67,20 +72,21 @@ header {
     width: 130px;
     height: 50px;
     background: transparent;
-    border: 2px solid lightblue;
+    border: 2px solid #86654B;
     outline: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 1.1em;
-    color: lightblue;
+    color: #86654B;
     font-weight: 500;
     margin-left: 40px;
     transition: .5s;
 }
 
 .navigation .btnLogin-popup:hover {
-    background: lightblue;
-    color: #162938;
+    background-color: #86654B;
+    border-color: white;
+    color: white;
 }
 
 .wrapper {
@@ -102,6 +108,8 @@ header {
 
 .wrapper.active-popup {
     transform: scale(1);
+    margin-left: 15%;
+    background-color: #f6f4f3;
 }
 
 .wrapper.active {
