@@ -1,0 +1,50 @@
+hr.double {
+    border-top: 3px double;
+    border-bottom: none;
+}
+
+.navbar {
+    background-color: #F6F4F3;
+    padding: 0 50px;
+}
+
+.navbar-brand {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: medium;
+    font-size: 2em;
+    color: #676767;
+}
+
+.container-fluid {
+    border-bottom: 2px solid #CDCDCD;
+    padding-bottom: 10px;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
+
+.btn-outline-success {
+    color: #86654B;
+    border-color: #86654B;
+}
+
+.btn-outline-success:hover {
+    background-color: #86654B;
+    border-color: white;
+}
+
+body {
+    padding-top: 20px;
+    background-color: #F6F4F3;
+}
+
+form {
+    width: 50%;
+}
+
+label{
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.5em;
+    font-weight: medium;
+}

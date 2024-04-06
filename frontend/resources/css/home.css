@@ -102,8 +102,11 @@ body {
     font-weight: normal;
 }
 
-#weatherImg {
-
+#weatherPage {
+    height: 500px;
+    background-color: #eccbf2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 10px; 
 }
 
 
