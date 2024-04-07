@@ -396,3 +396,25 @@ body, h1, h2, h3, p {
   height: auto; /* Maintain aspect ratio */
   border-radius: 8px; /* Optional: Adds rounded corners to your images */
 }
+
+
+.map-container {
+  width: 600px;
+  height: 450px;
+  border-radius: 8px; /* Gives the map container rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the map container */
+  overflow: hidden; /* Ensures no overflow content outside the rounded corners */
+}
+
+
+.directions-panel {
+  overflow-y: auto;
+  max-height: 450px;
+  background-color: #f9f9f9; /* Light background color for the panel */
+  border: 2px solid #e0e0e0; /* Adds a light border */
+  border-radius: 8px; /* Rounded corners for the panel */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  font-family: 'Roboto', sans-serif; /* Uses Roboto font for text */
+}
+
+
