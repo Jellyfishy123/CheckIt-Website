@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         allEvents = items.map(item => {
             return {
                 time: `${item.startDT} to ${item.endDT}`,
-                description: item.description, 
+                title: item.title, 
                 location: item.location
             };
         });
@@ -41,25 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         generateTaskCheckboxes(allEvents);
     });
     
-    // allEvents initialzation for functionality testing purpose
-    // const allEvents = [
-    //     {
-    //         time: "2024-04-03 12:00 to 2024-04-06 12:00",
-    //         description: "task1",
-    //         location: "1 HOUGANG STREET 91 HOUGANG 1 SINGAPORE 538692"
-    //     },
-    //     {
-    //         time: "2024-04-06 12:00 to 2024-04-23 13:00",
-    //         description: "picnic",
-    //         location: "1 TAMAN SERASI BOTANIC GARDENS VIEW SINGAPORE 257717"
-    //     },
-    //     {
-    //         time: "2024-04-03 12:00 to 2024-04-08 12:00",
-    //         description: "task3",
-    //         location: "50A LORONG H TELOK KURAU H RESIDENCES SINGAPORE 426049"
-    //     }
-    // ];
-
     
 
     function generateTaskCheckboxes(events) {
@@ -77,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const checkmark = document.createElement('span');
             checkmark.className = 'checkmark';
 
-            const textNode = document.createTextNode(event.description);
+            const textNode = document.createTextNode(event.title);
             label.append(checkbox, checkmark, textNode);
             taskList.appendChild(label);
         });
@@ -136,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             content += `
                 <div class="event">
                     <div class="time">${event.time}</div>
-                    <div class="description">${event.description}</div>
+                    <div class="title">${event.title}</div>
                 </div>
             `;
             console.log('events displayed');
