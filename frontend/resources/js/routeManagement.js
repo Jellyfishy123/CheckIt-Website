@@ -1,4 +1,5 @@
-import tasksService from './service/tasksService.js';
+import firebaseConfig from './models/firebaseConfig.js';
+import tasksService from './service/tasksService.js'
 
 const getCurrentUserId = () => {
     return localStorage.getItem('userId');
@@ -19,19 +20,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentTripIndex = 0;
     let items = [];
+    let allEvents;
     let selectedEvents = [];
     let tripsBetweenEvents = [];
 
     // Retrieve tasks from database
-    items = tasksService.getAllTasks();
-    const uid = getCurrentUserId();
-    const userTasks = items.filter(item => item.userID === uid);
-    const allEvents = userTasks.map(item => {
-        return {
-            time: `${item.startDT} to ${item.endDT}`,
-            description: item.description, 
-            location: item.location
-        };
+    
+    tasksService.getAllTasks().then(fetchedItems => {
+        const uid = getCurrentUserId();
+        items = fetchedItems.filter(item => item.userID === uid);
+    
+        allEvents = items.map(item => {
+            return {
+                time: `${item.startDT} to ${item.endDT}`,
+                description: item.description, 
+                location: item.location
+            };
+        });
+    
+        generateTaskCheckboxes(allEvents);
     });
     
     // allEvents initialzation for functionality testing purpose
@@ -55,9 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
 
-    function generateTaskCheckboxes() {
+    function generateTaskCheckboxes(events) {
         taskList.innerHTML = ''; // Clear existing tasks
-        allEvents.forEach((event, index) => {
+        events.forEach((event, index) => {
             const label = document.createElement('label');
             label.className = 'task-checkbox';
 
@@ -101,8 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const checkedTaskIndices = Array.from(document.querySelectorAll('input[name="task"]:checked'))
             .map(checkbox => parseInt(checkbox.getAttribute('data-index'), 10));
     
-        selectedEvents = checkedTaskIndices.map(index => allEvents[index]);
-    
+        selectedEvents = checkedTaskIndices.map(index => {
+            if (allEvents && index < allEvents.length) {
+                return allEvents[index];
+            } else {
+                console.error('Invalid index or allEvents not ready:', index);
+                return null; 
+            }
+        }).filter(event => event !== null); // Filter out invalid entries
+            
         // Sort the selectedEvents array based on the start time
         selectedEvents.sort((a, b) => {
             // Extract the start times
@@ -263,5 +277,4 @@ document.addEventListener('DOMContentLoaded', () => {
         displayRoute(directionsRenderer, start, end);
     }
     
-    generateTaskCheckboxes();
 });
