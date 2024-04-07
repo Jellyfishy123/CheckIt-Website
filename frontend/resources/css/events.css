@@ -325,3 +325,45 @@
     padding: 16px;
   }
 }
+
+
+/* CSS */
+.button-42 {
+  background-color: initial;
+  background-image: linear-gradient(-180deg, #FF7E31, #E62C03);
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Roboto";
+  width: 194px;
+  height: 31px;
+  align-self: flex-start;
+  margin-top: 25px;
+  text-align: center;
+  font-family: "Nunito-LightItalic";
+  margin-left: var(--dl-space-space-twounits);
+  border-color: rgba(0, 0, 0, 0.32);
+  margin-right: var(--dl-space-space-twounits);
+  line-height: 0;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 0;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 20%;
+  z-index: 9;
+  border: 0;
+  transition: box-shadow .2s;
+}
+
+.button-42:hover {
+  box-shadow: rgba(253, 76, 0, 0.5) 0 3px 8px;
+}
