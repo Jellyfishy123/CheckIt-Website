@@ -14,9 +14,10 @@ document.getElementById('taskForm').addEventListener('submit', (event) => {
     const endDT = document.querySelector("#newTaskEndDT").value;
 
     const title = document.querySelector("#newTaskTitle").value;
+    const location = document.querySelector("#newTaskLocation").value;
 
     try {
-        if (!title || !startDT || !endDT) {
+        if (!title || !startDT || !endDT || !location) {
             throw new Error("Please fill in all required fields (*).");
         }
         if (validateDatesAndDisplayError(startDT, endDT)) {
@@ -617,9 +618,10 @@ const editTaskView = (task) => {
         const endDT = document.querySelector("#newTaskEndDT").value;
 
         const title = document.querySelector("#newTaskTitle").value;
+        const location = document.querySelector("#newTaskLocation").value;
 
         try {
-            if (!title || !startDT || !endDT) {
+            if (!title || !startDT || !endDT || !location) {
                 throw new Error("Please fill in all required fields (*).");
             }
             if (validateDatesAndDisplayError(startDT, endDT)) {
