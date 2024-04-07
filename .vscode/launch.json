@@ -5,7 +5,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome",
-            "url": "file://${workspaceFolder}/frontend/login.html",
+            "url": "file://${workspaceFolder}/frontend/home.html",
             "webRoot": "${workspaceFolder}"
         }
     ]

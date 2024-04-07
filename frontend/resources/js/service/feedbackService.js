@@ -1,11 +1,11 @@
 import { ref, get, set, push, child, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 import firebase from '../models/firebase.js';
 
-const tasksRef = ref(firebase.db, 'tasks');
+const feedbackRef = ref(firebase.db, 'feedbacks');
 
-const getAllTasks = async () => {
+const getAllFeedbacks = async () => {
     const items = [];
-    await get(tasksRef).then((snapshot) => {
+    await get(feedbackRef).then((snapshot) => {
         snapshot.forEach((childSnapshot) => {
             const id = childSnapshot.key;
             const data = childSnapshot.val();
@@ -18,38 +18,38 @@ const getAllTasks = async () => {
     return items;
 };
 
-const addTask = async (task) => {
-    await push(tasksRef, task).then(() => {
-        console.log('Task added');
+const addFeedback = async (feedback) => {
+    await push(feedbackRef, feedback).then(() => {
+        console.log('feedback added');
     }).catch((error) => {
         console.error(error);
     });
 };
 
-const deleteTask = async (id) => {
-    const childRef = child(tasksRef, id);
+const deleteFeedback = async (id) => {
+    const childRef = child(feedbackRef, id);
     remove(childRef).then(() => {
-        console.log('Task deleted');
+        console.log('feedback deleted');
     }).catch((error) => {
         console.error(`Error removing ${id}`, error);
     });
 };
 
-const updateTask = async (task) => {
-    const taskClone = {...task};
-    const childRef = child(tasksRef, taskClone.id);
+const updateFeedback = async (feedback) => {
+    const feedbackClone = {...feedback};
+    const childRef = child(feedbackRef, feedbackClone.id);
 
-    delete taskClone.id;
-    set(childRef, taskClone).then(() => {
-        console.log('Task updated');
+    delete feedbackClone.id;
+    set(childRef, feedbackClone).then(() => {
+        console.log('feedback updated');
     }).catch((error) => {
         console.error(`Error updating ${id}`, error);
     });
 }
 
 export default {
-    getAllTasks,
-    addTask,
-    deleteTask,
-    updateTask
+    getAllFeedbacks,
+    addFeedback,
+    deleteFeedback,
+    updateFeedback
 };

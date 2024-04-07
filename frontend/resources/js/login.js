@@ -1,3 +1,6 @@
+// login.js
+import loginService from './service/loginService.js';
+
 const wrapper = document.querySelector('.wrapper');
 const loginLink = document.querySelector('.login-link');
 const registerLink = document.querySelector('.register-link');
@@ -7,6 +10,7 @@ const loginClick = document.querySelector('.login-btn');
 const registerClick = document.querySelector('.register-btn');
 
 registerLink.addEventListener('click', () => {
+    clearMessage('login-msg')
     wrapper.classList.add('active');
 });
 
@@ -19,6 +23,8 @@ registerClick.addEventListener('click', () => {
 });
 
 loginLink.addEventListener('click', () => {
+    clearMessage('register-msg')
+    registerform.reset();
     wrapper.classList.remove('active');
 });
 
@@ -26,53 +32,39 @@ btnPopup.addEventListener('click', () => {
     wrapper.classList.add('active-popup');
 });
 
+const loginform = document.getElementById('loginForm');
+const registerform = document.getElementById('registerForm');
+
 iconClose.addEventListener('click', () => {
     wrapper.classList.remove('active-popup');
     wrapper.classList.remove('active');
+    loginform.reset();
+    registerform.reset();
+
+    const loginErrorDiv = document.getElementById('login-msg');
+    loginErrorDiv.style.display = 'none';
+
+    const registerErrorDiv = document.getElementById('register-msg');
+    registerErrorDiv.style.display = 'none';
 });
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-import firebaseConfig from './models/firebaseConfig.js';
-console.log(firebaseConfig)
-
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
-function showMessage(message) {
-    const alertElement = document.createElement('div');
-    alertElement.className = 'alert';
-    alertElement.textContent = message;
-    alertElement.style.color = 'red'; // Set color to red
-    alertElement.style.position = 'absolute';
-    alertElement.style.top = 'auto';
-    alertElement.style.left = 'auto';
-    alertElement.style.width = '20%';
-    alertElement.style.height = '20%';
-    alertElement.style.backgroundColor = 'rgba(0, 0, 0, 0.5)'; // Semi-transparent black overlay
-    alertElement.style.display = 'flex';
-    alertElement.style.justifyContent = 'center';
-    alertElement.style.alignItems = 'center';
-    alertElement.style.zIndex = '9999';
-
-    const messageElement = document.createElement('span');
-    messageElement.textContent = message;
-    messageElement.style.padding = '20px';
-    messageElement.style.backgroundColor = 'white'; // White background for the message
-    messageElement.style.borderRadius = '5px';
-
-    //alertElement.appendChild(messageElement);
-
-    // Add the alert to the DOM
-    document.body.appendChild(alertElement);
-
-    // Remove the alert after a certain duration (e.g., 5 seconds)
-    setTimeout(() => {
-        alertElement.remove();
-    }, 1000); // 5000 milliseconds = 1 seconds
+function clearMessage(id) {
+    const messageDiv = document.getElementById(id);
+    messageDiv.style.display = 'none';
+    messageDiv.textContent = '';
 }
 
+function showMessage(message, id, color) {
+    const showMessageDiv = document.getElementById(id);
+    clearMessage(id);
+
+    //display the new message
+    showMessageDiv.textContent = message;
+    showMessageDiv.style.color = color;
+    showMessageDiv.style.display = 'block';
+    console.log("Error message displayed: ", message);
+
+}
 
 function save(formType) {
     let email, password, username;
@@ -81,58 +73,61 @@ function save(formType) {
         password = document.getElementById('login-password').value;
 
         if (!email || !password) {
-            // Display error message to user
-            showMessage("Please fill out all fields");
-            return; // Stop execution if any field is empty
+            showMessage("Please fill out all fields", 'login-msg',"#d97d71");
+            return;
         }
-
-        // Authenticate user with Firebase Authentication
-        firebase.auth().signInWithEmailAndPassword(email, password)
+        
+        loginService.signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                // Redirect to home page after successful login
+                localStorage.setItem('user', JSON.stringify(userCredential.user));
+                localStorage.setItem('userId', userCredential.user.uid);    
                 window.location.href = 'home.html';
-
-                // console.log(userCredential.user)
             })
             .catch((error) => {
+                showMessage("Invalid email or password", 'login-msg',"#d97d71");
                 console.error("Error signing in:", error);
-                // Handle authentication errors (e.g., display error message to user)
             });
+
     } else if (formType === 'register') {
-        console.log('register runs')
         username = document.getElementById('register-username').value;
         email = document.getElementById('register-email').value;
         password = document.getElementById('register-password').value;
 
-         // Check if any of the fields are empty
         if (!username || !email || !password) {
-            // Display error message to user
-            showMessage("Please fill out all fields");
-            return; // Stop execution if any field is empty
+            showMessage("Please fill out all fields", 'register-msg',"#d97d71");
+            return;
         }
 
-        // Push user credentials to the database
-        firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+        //check if checkbox is checked
+        if (!document.getElementById('terms').checked) {
+            showMessage("Please agree to terms and conditions", 'register-msg',"#d97d71");
+            return;
+        }
 
-            console.log('Data saved successfully!');
-            // Clear input fields after submission
-            document.getElementById('register-username').value = '';
-            document.getElementById('register-email').value = '';
-            document.getElementById('register-password').value = '';
-            // Redirect to the login page
-            window.location.href = 'login.html';
-
-            // Signed in 
-            var user = userCredential.user;
-            
-            // ...
-        })
-        .catch((error) => {
-            console.error("Error saving data:", error);
-        });
+        loginService.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                console.log('Data saved successfully!');
+                document.getElementById('register-username').value = '';
+                document.getElementById('register-email').value = '';
+                document.getElementById('register-password').value = '';
+                showMessage("Registration successful. Proceed to Login", 'register-msg',"#62bd76"); 
+            })
+            .catch((error) => {
+                showMessage("Email already in use", 'register-msg',"#d97d71");
+                console.error("Error saving data:", error);
+            });
     }
 }
+
+window.addEventListener('load', () => {
+    // Code to check for stored authentication state
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+        // User is authenticated, redirect to home page
+        window.location.href = 'home.html';
+    }
+});
+
 
 
 

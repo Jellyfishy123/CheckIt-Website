@@ -6,55 +6,162 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SC2006</title>
-    <link rel="stylesheet" href="../frontend/resources/css/faq.css">
+    <link rel="stylesheet" href="faq.css">
+    <!-- jQuery -->
+    <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+
+     <script>
+ $(document).ready(function() {
+ 
+    $('.faq_question').click(function() {
+ 
+        if ($(this).parent().is('.open')){
+            $(this).closest('.faq').find('.faq_answer_container').animate({'height':'0'},500);
+            $(this).closest('.faq').removeClass('open');
+ 
+            }else{
+                var newHeight =$(this).closest('.faq').find('.faq_answer').height() +'px';
+                $(this).closest('.faq').find('.faq_answer_container').animate({'height':newHeight},500);
+                $(this).closest('.faq').addClass('open');
+            }
+    });
+});
+</script>
+  
+<!-- CSS -->
+<style>
+ 
+/*FAQS*/
+.faq_question {
+    margin: 0px;
+    padding: 0px 0px 5px 0px;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+}
+ 
+.faq_answer_container {
+    height: 0px;
+    overflow: hidden;
+    padding: 0px;
+}
+</style>
 </head>
 
 <body>
 
     <header>
-        <a class="logo" href="home.html">CHECKIT</a>
+        <h2 class="logo">CHECKIT</h2>
         <nav class="navigation">
-            <!-- <a href="http://127.0.0.1:5500/">Home</a> -->
-
+            <a href="home.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+            <a href="faq.html">FAQs</a> <!-- Updated href attribute -->
+            <button class="btnLogin-popup">Login</button>
         </nav>
-        <h1>FAQs</h1>
     </header>
 
-    <div class="container">
-        <details>
-        <summary>I'm new to this. How do I use the web app?</summary>
-            <div>
-            Register as a new user and login using your email and password.
-            </div>
-        </details>
-        <details>
-        <summary>How do I create a Todo?</summary>
-            <div>
-            Go to the homepage, click new and start filling in the details of your Todo.
-            </div>
-        </details>
-        <details>
-        <summary>I'm not satisifed with the functionalities. How do I leave a feedback?</summary>
-            <div>
-            Go to the homepage, click feedback and start filling in the details of your feedback. Keep in mind that we will respond within 3 working days so we appreciate your patience.
-            </div>
-        </details>
-        <details>
-        <summary>Is it possible to make edits to a Todo I already created, without deleting it and making a new one?</summary>
-            <div>
-            Yes of course. When you view a created Todo, you can have the option to edit by clicking edit and filling in the new details.
-            </div>
-        </details>
+    <div class="wrapper">
+        <span class="icon-close">
+            <ion-icon name="close"></ion-icon>
+        </span>
+
+        <div class="form-box login">
+            <h2>Login</h2>
+            <form action="#">
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="mail"></ion-icon>
+                    </span>
+                    <input type="email" id="login-email" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="lock-closed"></ion-icon>
+                    </span>
+                    <input type="password" id="login-password" required>
+                    <label>Password</label>
+                </div>
+                <div class="remember-forgot">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                <button type="button" onclick="save('login')" class="btn">Login</button>
+                <div class="login-register">
+                    <p>Don't have an account? <a href="#" class="register-link">Register</a></p>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-box register">
+            <h2>Registration</h2>
+            <form action="#">
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="person"></ion-icon>
+                    </span>
+                    <input type="text" id="register-username" required>
+                    <label>Username</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="mail"></ion-icon>
+                    </span>
+                    <input type="email" id="register-email" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon">
+                        <ion-icon name="lock-closed"></ion-icon>
+                    </span>
+                    <input type="password" id="register-password" required>
+                    <label>Password</label>
+                </div>
+                <div class="remember-forgot">
+                    <label><input type="checkbox"> I agree to the terms & conditions</label>
+                </div>
+                <button type="button" onclick="save('register')" class="btn">Register</button>
+                <div class="login-register">
+                    <p>Already have an account? <a href="#" class="login-link">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+     <!-- HTML -->
+    <div class="faq_container">
+        <div class="faq">
+            <div class="faq_question">1. How do I use the Todo app?</div>
+                <div class="faq_answer_container">
+                <div class="faq_answer">Answer goes here</div>
+            </div>        
+        </div>
+                <div class="faq">
+            <div class="faq_question">2. Can I edit a Todo after I created one?</div>
+                <div class="faq_answer_container">
+                <div class="faq_answer">Answer goes here</div>
+            </div>        
+        </div>
+                <div class="faq">
+            <div class="faq_question">3. What happens if there is a change in weather?</div>
+                <div class="faq_answer_container">
+                <div class="faq_answer">Answer goes here</div>
+            </div>        
+        </div>
+                <div class="faq">
+            <div class="faq_question">4. Can I sign in without using my username?</div>
+                <div class="faq_answer_container">
+                <div class="faq_answer">Answer goes here</div>
+            </div>        
+        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
-    <script type="module" src="../frontend/resources/js/script.js"></script>
+    <script type="module" src="script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>
-
-
-

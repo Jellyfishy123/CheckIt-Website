@@ -2,15 +2,67 @@ import firebaseConfig from './models/firebaseConfig.js';
 import tasksService from './service/tasksService.js';
 import apiService from './service/weatherService.js';
 import weatherService from './service/weatherService.js';
+import LocationService from './service/locationService.js';
 
 let selectedTextContent = 'Today';
 let selectedNum = 0;
 
 document.querySelector("#newTaskStartDTButton").addEventListener("click", () => datepicker("#newTaskStartDT"));
 document.querySelector("#newTaskEndDTButton").addEventListener("click", () => datepicker("#newTaskEndDT"));
-document.getElementById('taskForm').addEventListener('submit', () => {
-    addTasks();
-    resetFormFields();
+document.getElementById('taskForm').addEventListener('submit', (event) => {
+    const startDT = document.querySelector("#newTaskStartDT").value;
+    const endDT = document.querySelector("#newTaskEndDT").value;
+
+    const title = document.querySelector("#newTaskTitle").value;
+
+    try {
+        if (!title || !startDT || !endDT) {
+            throw new Error("Please fill in all required fields (*).");
+        }
+        if (validateDatesAndDisplayError(startDT, endDT)) {
+            addTasks();
+            $('#staticBackdrop').modal('hide');
+            resetFormFields();
+        } else {
+            throw new Error("Please enter a valid date range.");
+        }
+    } catch (error) {
+        console.error(`Validation error: ${error.message}`);
+        const errorMessage = document.querySelector("#errorMessage");
+        errorMessage.textContent = error.message;
+        errorMessage.style.display = "block";
+
+        // console.log("task not added"); //for debugging
+    }
+});
+
+document.getElementById('newTaskLocation').addEventListener('input', function () {
+    const location = this.value;
+    LocationService.searchLocation(location)
+        .then(results => {
+            const resultsDiv = document.getElementById('locationResults');
+            resultsDiv.innerHTML = '';
+            if (results.length > 0) {
+                results.forEach(result => {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.textContent = result.ADDRESS;
+                    resultDiv.classList.add('list-group-item', 'list-group-item-action');
+                    resultDiv.addEventListener('click', function () {
+                        document.getElementById('newTaskLocation').value = this.textContent;
+                        resultsDiv.style.display = 'none';
+                    });
+                    resultsDiv.appendChild(resultDiv);
+                });
+                resultsDiv.classList.add('list-group');
+                resultsDiv.style.display = 'block';
+            } else {
+                resultsDiv.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById('locationResults').style.display = 'none';
+        });
 });
 
 const datepicker = (id) => {
@@ -18,17 +70,46 @@ const datepicker = (id) => {
         enableTime: true,
         dateFormat: "Y-m-d H:i",
         allowInput: false,
-        clickOpens: false
+        clickOpens: false,
+        onChange: function (selectedDates, dateStr, instance) {
+            const startDT = document.querySelector("#newTaskStartDT").value;
+            const endDT = document.querySelector("#newTaskEndDT").value;
+            // console.log(`Start date: ${startDT}, End date: ${endDT}`); // Debugging line
+            validateDatesAndDisplayError(startDT, endDT);
+        }
     }).open();
+}
+
+const validateDatesAndDisplayError = (startDT, endDT) => {
+    const errorMessage = document.querySelector("#errorMessage");
+    const startDate = flatpickr.parseDate(startDT, "Y-m-d H:i");
+    const endDate = flatpickr.parseDate(endDT, "Y-m-d H:i");
+    const currentDate = new Date();
+
+    if (startDate > endDate) {
+        errorMessage.textContent = 'End date cannot be before start date';
+        errorMessage.style.display = "block";
+        return false;
+    }
+
+    if (endDate < currentDate) {
+        errorMessage.textContent = 'End date cannot be in the past';
+        errorMessage.style.display = "block";
+        return false;
+    }
+
+    errorMessage.style.display = "none";
+    return true;
 }
 
 const resetFormFields = () => {
     const form = document.getElementById('taskForm');
     const inputs = form.elements;
+    const errorMessage = document.querySelector("#errorMessage");
 
-    // Reset the form fields to their initial state
+    errorMessage.style.display = "none";
+
     for (let i = 0; i < inputs.length; i++) {
-        // submit and radio buttons value should not be reset
         if (inputs[i].type === 'submit' || inputs[i].type === 'radio') {
             inputs[i].disabled = false;
             continue;
@@ -38,16 +119,6 @@ const resetFormFields = () => {
     }
 }
 
-const updateMasterCheckbox = () => {
-    const scrollContainer = document.getElementById('scrollContainer');
-    const allCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]');
-    const selectedCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]:checked');
-    document.getElementById('selectAll').checked = allCheckboxes.length == selectedCheckboxes.length;
-};
-
-// Items array
-let items = [];
-
 const priorityOptions = {
     'unassigned': '#f5f5f5',
     'low': '#A4E8B3',
@@ -56,23 +127,28 @@ const priorityOptions = {
 };
 
 const getCurrentUserId = () => {
-    // return firebase.auth().currentUser.uid;
-    return '1';//for testing purposes
+    return localStorage.getItem('userId');
 }
 
-//Helper function
 const createDiv = (className, id) => {
     const div = document.createElement('div');
     div.className = className;
     if (id) div.id = id;
     return div;
 }
-
+const updateMasterCheckbox = () => {
+    const scrollContainer = document.getElementById('scrollContainer');
+    const allCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]');
+    const selectedCheckboxes = scrollContainer.querySelectorAll('input[type="checkbox"]:checked');
+    document.getElementById('selectAll').checked = allCheckboxes.length == selectedCheckboxes.length;
+};
+// Items array
+let items = [];
 const showTasks = async () => {
     items = await tasksService.getAllTasks();
 
     const uid = getCurrentUserId();
-    items = items.filter(item => item.userID === uid);
+    items = items.filter(item => item.userID == uid);
 
     const cardContent = document.getElementById('card-body');
     cardContent.style.height = " 700px";
@@ -131,7 +207,6 @@ const showTasks = async () => {
     const scrollContainer = createDiv('w-100 m-3 overflow-auto pe-3', 'scrollContainer');
     scrollContainer.style.height = '450px';
 
-    //Create each Todo item
     items.forEach((item) => {
         const itemElement = createDiv('w-100 d-flex');
 
@@ -315,7 +390,7 @@ const showWeather = async () => {
     weatherTextHeader.style.fontStyle = 'normal';
     weatherTextHeader.style.color = '#676767';
     weatherTextHeader.style.marginBottom = '0px';
-    
+
     currentWeatherContainer.appendChild(weatherTextHeader);
 
     const weathercontent = createDiv('d-flex align-items-center justify-content-center', 'weathercontent');
@@ -382,14 +457,16 @@ const showWeatherImpactedTasks = async (item) => {
         //change weatherimpactedtaskheader content to "No weather impacted tasks"
         const weatherImpactedTasksHeader = document.querySelector('text');
         weatherImpactedTasksHeader.textContent = 'No Weather Impacted Task(s)';
-        
+
     }
 
 }
 
 const showDueTasks = async (selectedNum) => {
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0); //to compare only the date
+    currentDate.setHours(0, 0, 0, 0);
+
+    const remainingDays = 7 - currentDate.getDay();
 
     const dueTaskScrollContainer = document.getElementById('dueTaskScrollContainer');
 
@@ -404,10 +481,11 @@ const showDueTasks = async (selectedNum) => {
             dueinDays = -1;
         }
 
-        // Show tasks that are due today, tomorrow, this week, next week, or overdue
-        if ((dueinDays == selectedNum) ||
-            (selectedNum == 7 && dueinDays >= 0 && dueinDays < selectedNum) ||
-            (selectedNum == 14 && dueinDays >= 7 && dueinDays < selectedNum)) {
+        if ((selectedNum <= 1 && dueinDays == selectedNum) ||
+            (selectedNum == 7 && dueinDays >= 0 && dueinDays <= remainingDays) ||
+            (selectedNum == 14 && dueinDays >= remainingDays && dueinDays <= remainingDays + 7)) {
+
+            console.log(dueinDays,remainingDays);
 
             const dueitemElement = createDiv('w-100 d-flex');
             const dueitemBox = createDiv('rounded w-100 p-2 mx-3 mt-3 position-relative');
@@ -485,8 +563,8 @@ const viewDetailedTasks = (task) => {
 }
 
 const addTasks = () => {
-
     const uid = getCurrentUserId();
+
     const header = document.getElementById('newTaskLabel');
     header.textContent = 'New Task';
 
@@ -501,7 +579,6 @@ const addTasks = () => {
         taskObj[input.name] = input.value;
     });
 
-    //add userID to taskObj
     taskObj.userID = uid;
 
     console.log(taskObj);
@@ -535,7 +612,31 @@ const editTaskView = (task) => {
         }
     }
 
-    $('#confirmButton').on('click', () => confirmEditTasks(task));
+    $('#confirmButton').on('click', () => {
+        const startDT = document.querySelector("#newTaskStartDT").value;
+        const endDT = document.querySelector("#newTaskEndDT").value;
+
+        const title = document.querySelector("#newTaskTitle").value;
+
+        try {
+            if (!title || !startDT || !endDT) {
+                throw new Error("Please fill in all required fields (*).");
+            }
+            if (validateDatesAndDisplayError(startDT, endDT)) {
+                confirmEditTasks(task);
+            } else {
+                throw new Error("Please enter a valid date range.");
+            }
+        } catch (error) {
+
+            console.error(`Validation error: ${error.message}`);
+            const errorMessage = document.querySelector("#errorMessage");
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = "block";
+
+            console.log("task not edited"); //for debugging
+        }
+    });
     $('#cancelButton').on('click', () => {
         viewDetailedTasks(task);
     });
