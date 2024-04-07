@@ -8,14 +8,11 @@ const getCurrentUserId = () => {
 document.addEventListener('DOMContentLoaded', () => {
     const viewRouteButton = document.getElementById('view-route');
     const changePlanButton = document.getElementById('change-plan');
-    const nextTripButton = document.getElementById('next-trip');
-    const previousTripButton = document.getElementById('previous-trip');
     const itinerarySection = document.getElementById('itinerary');
     const confirmBtn = document.getElementById('confirm-btn');
     const taskSelectionView = document.getElementById('task-selection-view');
     const itineraryView = document.getElementById('itinerary-view');
     const allTasksCheckbox = document.getElementById('allTask');
-    const taskList = document.getElementById('taskList');
     const routeDetailsSection = document.getElementById('route-details');
 
     let currentTripIndex = 0;
@@ -44,44 +41,60 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     function generateTaskCheckboxes(events) {
-        taskList.innerHTML = ''; // Clear existing tasks
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = ''; 
         events.forEach((event, index) => {
             const label = document.createElement('label');
             label.className = 'task-checkbox';
-
+    
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = `task-${index}`;
             checkbox.name = 'task';
             checkbox.setAttribute('data-index', index);
-
+    
+            checkbox.addEventListener('change', updateMasterCheckbox);
+    
             const checkmark = document.createElement('span');
             checkmark.className = 'checkmark';
-
+    
             const textNode = document.createTextNode(event.title);
             label.append(checkbox, checkmark, textNode);
             taskList.appendChild(label);
         });
     }
 
-    allTasksCheckbox.addEventListener('change', () => {
-        document.querySelectorAll('input[name="task"]').forEach(checkbox => {
-            checkbox.checked = allTasksCheckbox.checked;
+    function updateMasterCheckbox() {
+        const allCheckboxes = document.querySelectorAll('#taskList input[type="checkbox"][name="task"]');
+        const selectedCheckboxes = document.querySelectorAll('#taskList input[type="checkbox"][name="task"]:checked');
+        document.getElementById('allTask').checked = allCheckboxes.length === selectedCheckboxes.length;
+    }
+
+    allTasksCheckbox.addEventListener('change', function() {
+        document.querySelectorAll('#taskList input[type="checkbox"][name="task"]').forEach(checkbox => {
+            checkbox.checked = this.checked;
         });
     });
 
     confirmBtn.addEventListener('click', () => {
         updateEventsList();
         console.log('Confirmed events:', selectedEvents);
-        updateTravelTimes();
-        taskSelectionView.classList.add('hidden');
-        itineraryView.classList.remove('hidden');
-        displayItinerary(selectedEvents);
+        if (selectedEvents.length >= 2) {
+            updateTravelTimes();
+            taskSelectionView.classList.add('hidden');
+            itineraryView.classList.remove('hidden');
+            displayItinerary(selectedEvents);
+        } else {
+            // If there are less than two selected events, alert the user
+            alert("Please select at least two events to plan your route.");
+        }
     });
 
     changePlanButton.addEventListener('click', () => {
         taskSelectionView.classList.remove('hidden');
         itineraryView.classList.add('hidden');
+        routeDetailsSection.innerHTML = '';
+        document.getElementById('switch-route').innerHTML = '';
     });
 
 
@@ -145,19 +158,77 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('View Route button clicked');
         console.log('Selected events:', selectedEvents);
         if (selectedEvents.length > 1) { // Ensure there are at least two events for a trip
-            let content = `
+            let routeContent = `
                 <div class="route-description">
                     <div id="dynamicMapContainer" class="map-container"></div>
                     <div id="dynamicDirectionsPanel" class="directions-panel"></div>
             </div>
             `;
-            routeDetailsSection.innerHTML = content;
+            routeDetailsSection.innerHTML = routeContent;
+            
+            if(selectedEvents.length > 2){
+                let buttonContent = `
+                <button id="previous-trip">PREVIOUS TRIP</button>
+                <button id="next-trip">NEXT TRIP</button>
+                `;
+                document.getElementById('switch-route').innerHTML = buttonContent;
+                document.getElementById('next-trip').addEventListener('click', () => {
+                    if (currentTripIndex < selectedEvents.length - 2) {
+                        currentTripIndex++;
+                        updateMapForCurrentTrip();
+                    }
+                });
+    
+                document.getElementById('previous-trip').addEventListener('click', () => {
+                    if (currentTripIndex > 0) {
+                        currentTripIndex--;
+                        updateMapForCurrentTrip();
+                    }
+                });
+            }
 
             // Initialize the map for the first trip
             currentTripIndex = 0;
             updateMapForCurrentTrip();
         }
+        refreshNavigationButtons();
     });
+
+    function refreshNavigationButtons() {
+        const hasPrevious = currentTripIndex > 0;
+        const hasNext = currentTripIndex < selectedEvents.length - 2;
+    
+        // Dynamically set the disabled state or styling of the buttons
+        // Assuming you've added the buttons to the switch-route div as in your original code
+        let buttonContent = `
+            <button id="previous-trip" ${!hasPrevious ? 'disabled' : ''}>PREVIOUS TRIP</button>
+            <button id="next-trip" ${!hasNext ? 'disabled' : ''}>NEXT TRIP</button>`;
+        document.getElementById('switch-route').innerHTML = buttonContent;
+    
+        attachNavigationButtonListeners();
+    }
+    
+    function attachNavigationButtonListeners() {
+        const nextTripButton = document.getElementById('next-trip');
+        const previousTripButton = document.getElementById('previous-trip');
+    
+        nextTripButton.addEventListener('click', () => {
+            if (currentTripIndex < selectedEvents.length - 2) {
+                currentTripIndex++;
+                updateMapForCurrentTrip();
+            }
+        });
+    
+        previousTripButton.addEventListener('click', () => {
+            if (currentTripIndex > 0) {
+                currentTripIndex--;
+                updateMapForCurrentTrip();
+            }
+        });
+    
+        // Refresh button states after attaching listeners
+        refreshNavigationButtons();
+    }
 
     function updateMapForCurrentTrip() {
         if (selectedEvents.length > 1 && currentTripIndex < selectedEvents.length - 1) {
@@ -166,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let departureTime = new Date(selectedEvents[currentTripIndex].time.split(" to ")[1]);
             initDynamicMap(startLocation, endLocation, departureTime);
         }
+        refreshNavigationButtons();
     }
     
     function updateTravelTimes() {
@@ -244,19 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    nextTripButton.addEventListener('click', () => {
-        if (currentTripIndex < selectedEvents.length - 2) {
-            currentTripIndex++;
-            updateMapForCurrentTrip();
-        }
-    });
-    
-    previousTripButton.addEventListener('click', () => {
-        if (currentTripIndex > 0) { // Check if previous trip exists
-            currentTripIndex--;
-            updateMapForCurrentTrip();
-        }
-    });
 
     function initDynamicMap(start, end, departureTime) {
         console.log('initDynamicMap called with:', start, end);

@@ -171,6 +171,48 @@ body, h1, h2, h3, p {
     justify-content: space-between;
   }
   
+  #switch-route {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  #switch-route button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    color: white;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  #switch-route button:hover {
+    background-color: #0056b3;
+  }
+  
+  
+
+  #details {
+    width: 80%;
+    max-width: 1000px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Styling for disabled buttons */
+  #switch-route button[disabled] {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  #switch-route button[disabled]:hover {
+    background-color: #cccccc; /* Keep the background color on hover */
+  }
+
+  
 
   /* Add responsive design */
   @media screen and (max-width: 768px) {
