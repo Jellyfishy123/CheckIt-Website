@@ -147,9 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedEvents.length > 1) { // Ensure there are at least two events for a trip
             let content = `
                 <div class="route-description">
-                    <div id="dynamicMapContainer" class="map-container" style="width: 600px; height: 450px;"></div>
+                    <div id="dynamicMapContainer" class="map-container"></div>
                     <div id="dynamicDirectionsPanel" class="directions-panel"></div>
-                </div>
+            </div>
             `;
             routeDetailsSection.innerHTML = content;
 
@@ -163,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedEvents.length > 1 && currentTripIndex < selectedEvents.length - 1) {
             const startLocation = selectedEvents[currentTripIndex].location;
             const endLocation = selectedEvents[currentTripIndex + 1].location;
-            initDynamicMap(startLocation, endLocation);
+            let departureTime = new Date(selectedEvents[currentTripIndex].time.split(" to ")[1]);
+            initDynamicMap(startLocation, endLocation, departureTime);
         }
     }
     
@@ -172,9 +173,11 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < selectedEvents.length - 1; i++) {
             let startLocation = selectedEvents[i].location;
             let endLocation = selectedEvents[i + 1].location;
+            let departureTime = new Date(selectedEvents[i].time.split(" to ")[1]);
+            console.log('departure time is:', departureTime);
             
             let routePromise = new Promise((resolve) => {
-                calculateRoute(startLocation, endLocation, (travelTime) => {
+                calculateRoute(startLocation, endLocation, departureTime, (travelTime) => {
                     if (travelTime !== null) {
                         const travelTimeInMinutes = Math.round(travelTime / 60);
                         tripsBetweenEvents[i] = { travelTime: `${travelTimeInMinutes} min` };
@@ -184,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     resolve();
                 });
             });
+            
             routePromises.push(routePromise);
         }
     
@@ -196,30 +200,41 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     
-    function calculateRoute(start, end, callback) {
+    function calculateRoute(start, end, departureTime, callback) {
+        console.log(`Requesting directions from ${start} to ${end} with departure at ${departureTime}`);
+    
         const directionsService = new google.maps.DirectionsService();
         directionsService.route({
             origin: start,
             destination: end,
             travelMode: google.maps.TravelMode.TRANSIT,
+            transitOptions: {
+                departureTime: departureTime,
+            },
         }, (response, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
                 const totalTravelTime = response.routes[0].legs.reduce((total, leg) => total + leg.duration.value, 0);
-                callback(totalTravelTime); 
+                callback(totalTravelTime);
             } else {
                 console.error('Directions request failed due to ' + status);
-                callback(null); 
+                callback(null);
             }
         });
     }
     
+    
 
-    function displayRoute(directionsRenderer, start, end) {
+    function displayRoute(directionsRenderer, start, end, departureTime) {
         const directionsService = new google.maps.DirectionsService();
         directionsService.route({
             origin: start,
             destination: end,
             travelMode: google.maps.TravelMode.TRANSIT,
+
+            transitOptions: {
+                departureTime: departureTime,
+            },
+
         }, (response, status) => {
             if (status === google.maps.DirectionsStatus.OK) {
                 directionsRenderer.setDirections(response);
@@ -243,8 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    function initDynamicMap(start, end) {
-        console.log('initDynamicMap called with:', start, end); // Debug log
+    function initDynamicMap(start, end, departureTime) {
+        console.log('initDynamicMap called with:', start, end);
+        const directionsPanel = document.getElementById("dynamicDirectionsPanel");
+        directionsPanel.innerHTML = ''; // Clear existing directions
         const map = new google.maps.Map(document.getElementById("dynamicMapContainer"), {
             zoom: 12,
             center: { lat: 1.3483, lng: 103.6831 }, // Center map based on general Singapore area
@@ -254,8 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(map);
         directionsRenderer.setPanel(document.getElementById("dynamicDirectionsPanel"));
-
-        displayRoute(directionsRenderer, start, end);
+        displayRoute(directionsRenderer, start, end, departureTime);
     }
     
 });
