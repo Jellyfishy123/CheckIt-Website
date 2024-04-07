@@ -1,3 +1,9 @@
+
+
+const getCurrentUserId = () => {
+    return localStorage.getItem('userId');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const viewRouteButton = document.getElementById('view-route');
     const changePlanButton = document.getElementById('change-plan');
@@ -13,12 +19,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const routeDetailsSection = document.getElementById('route-details');
 
     let currentTripIndex = 0;
-
-    const allEvents = [
-        { time: '8:00 AM to 10:00 AM', description: 'Lesson @NTU Gaia' },
-        { time: '11:00 AM to 12:00 PM', description: 'Event @Queenstown' },
-        { time: '1:00 PM to 3:00 PM', description: 'Lunch @JCube' }
-    ];
+    let items = [];
+    const uid = getCurrentUserId();
+    const userTasks = items.filter(item => item.userID === uid);
+    const allEvents = userTasks.map(item => {
+        return {
+            time: `${item.startDT} to ${item.endDT}`,
+            description: item.description, 
+            location: item.location
+        };
+    });
 
     const tripsBetweenEvents = [
         { travelTime: '55 min' }, // between 1st and 2nd event
@@ -78,17 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayItinerary(eventsToShow) {
         let content = '';
         eventsToShow.forEach((event, index) => {
-            // Add event
             content += `
                 <div class="event">
                     <div class="time">${event.time}</div>
                     <div class="description">${event.description}</div>
                 </div>
             `;
-            // Add trip between events, if it exists
-            if (index < eventsToShow.length - 1) { // Ensure there's a next event
-                const trip = tripsBetweenEvents[index]; // Assuming tripsBetweenEvents matches the eventsToShow structure
-                if (trip) { // Check if there's a corresponding trip
+
+            if (index < eventsToShow.length - 1) {
+                const trip = tripsBetweenEvents[index];
+                if (trip) {
                     content += `
                         <div class="trip">
                             <img class="transport-icon" src="./resources/images/transport.jpg">
@@ -131,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
     directionsRenderer.setMap(map);
     directionsRenderer.setPanel(document.getElementById("dynamicDirectionsPanel"));
 
-    // Use addresses for Nanyang Technological University and Changi Airport
     const start = 'Nanyang Technological University, Singapore';
     const end = 'Changi Airport, Singapore';
     calculateAndDisplayRoute(directionsRenderer, start, end);
