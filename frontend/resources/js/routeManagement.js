@@ -1,4 +1,4 @@
-
+import tasksService from './service/tasksService.js';
 
 const getCurrentUserId = () => {
     return localStorage.getItem('userId');
@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextTripButton = document.getElementById('next-trip');
     const previousTripButton = document.getElementById('previous-trip');
     const itinerarySection = document.getElementById('itinerary');
-    const detailsSection = document.getElementById('details');
     const confirmBtn = document.getElementById('confirm-btn');
     const taskSelectionView = document.getElementById('task-selection-view');
     const itineraryView = document.getElementById('itinerary-view');
@@ -22,9 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let items = [];
     let selectedEvents = [];
     let tripsBetweenEvents = [];
+
+    // Retrieve tasks from database
+    items = tasksService.getAllTasks();
     const uid = getCurrentUserId();
     const userTasks = items.filter(item => item.userID === uid);
-    
     const allEvents = userTasks.map(item => {
         return {
             time: `${item.startDT} to ${item.endDT}`,
