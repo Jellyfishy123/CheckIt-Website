@@ -402,6 +402,7 @@ const showWeather = async () => {
     weatherText.style.fontStyle = 'normal';
     weatherText.style.color = '#676767';
     weatherText.style.marginTop = '0px';
+    weatherText.style.fontSize = '1.5rem';
     weathercontent.appendChild(weatherText);
 
     const weatherIcon = document.createElement('img');

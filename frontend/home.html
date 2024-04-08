@@ -27,7 +27,8 @@
             <nav class="navigation">
                 <a class="faq-btn" href="faq.html">FAQs</a>
                 <a class="navbar-brand" href="../frontend/feedback.html">Feedback</a>
-            <button class="signout-button" onclick="localStorage.removeItem('user'); localStorage.removeItem('userId'); window.location.href='login.html';">SignOut</button>
+                <button class="signout-button"
+                    onclick="localStorage.removeItem('user'); localStorage.removeItem('userId'); window.location.href='login.html';">SignOut</button>
             </nav>
         </div>
         </div>
@@ -64,12 +65,11 @@
         <div class="container col-3 card p-2" id="weatherPage">
             <div class="h-75 d-flex flex-column p-2">
                 <img class="h-25 w-25 mx-auto mt-5" id="weatherImg">
-                <div class="card-text p-3 fst-italic" id="weatherText"></div>
+                
+                <div class="card-text p-2 fst-italic" id="weatherText"></div>
             </div>
-            <div>
-                <div class="card-text text-center">Current Weather</div>
-                <div class="card-text fst-italic" id="weatherCondition"></div>
-            </div>
+            <div class="card-text text-center">Current Weather</div>
+            <div class="card-text weatherCondition" id="weatherCondition"></div>
         </div>
     </div>
 
