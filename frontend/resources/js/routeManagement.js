@@ -173,62 +173,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 document.getElementById('switch-route').innerHTML = buttonContent;
                 document.getElementById('next-trip').addEventListener('click', () => {
-                    if (currentTripIndex < selectedEvents.length - 2) {
+                    if (currentTripIndex < selectedEvents.length - 1) {
                         currentTripIndex++;
                         updateMapForCurrentTrip();
+                        refreshNavigationButtons();
                     }
                 });
-    
+            
                 document.getElementById('previous-trip').addEventListener('click', () => {
                     if (currentTripIndex > 0) {
                         currentTripIndex--;
                         updateMapForCurrentTrip();
+                        refreshNavigationButtons();
                     }
                 });
+            }else{
+                document.getElementById('switch-route').innerHTML ='';
             }
 
             // Initialize the map for the first trip
             currentTripIndex = 0;
             updateMapForCurrentTrip();
         }
-        refreshNavigationButtons();
     });
 
     function refreshNavigationButtons() {
         const hasPrevious = currentTripIndex > 0;
         const hasNext = currentTripIndex < selectedEvents.length - 2;
     
-        // Dynamically set the disabled state or styling of the buttons
-        // Assuming you've added the buttons to the switch-route div as in your original code
-        let buttonContent = `
-            <button id="previous-trip" ${!hasPrevious ? 'disabled' : ''}>PREVIOUS TRIP</button>
-            <button id="next-trip" ${!hasNext ? 'disabled' : ''}>NEXT TRIP</button>`;
-        document.getElementById('switch-route').innerHTML = buttonContent;
-    
-        attachNavigationButtonListeners();
-    }
-    
-    function attachNavigationButtonListeners() {
-        const nextTripButton = document.getElementById('next-trip');
         const previousTripButton = document.getElementById('previous-trip');
+        const nextTripButton = document.getElementById('next-trip');
     
-        nextTripButton.addEventListener('click', () => {
-            if (currentTripIndex < selectedEvents.length - 2) {
-                currentTripIndex++;
-                updateMapForCurrentTrip();
-            }
-        });
+        // Enable or disable the "Previous Trip" button
+        if (hasPrevious) {
+            previousTripButton.disabled = false;
+            previousTripButton.classList.remove("disabled"); 
+        } else {
+            previousTripButton.disabled = true;
+            previousTripButton.classList.add("disabled");
+        }
     
-        previousTripButton.addEventListener('click', () => {
-            if (currentTripIndex > 0) {
-                currentTripIndex--;
-                updateMapForCurrentTrip();
-            }
-        });
-    
-        // Refresh button states after attaching listeners
-        refreshNavigationButtons();
+        // Enable or disable the "Next Trip" button
+        if (hasNext) {
+            nextTripButton.disabled = false;
+            nextTripButton.classList.remove("disabled");
+        } else {
+            nextTripButton.disabled = true;
+            nextTripButton.classList.add("disabled");
+        }
     }
+    
 
     function updateMapForCurrentTrip() {
         if (selectedEvents.length > 1 && currentTripIndex < selectedEvents.length - 1) {
@@ -236,8 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const endLocation = selectedEvents[currentTripIndex + 1].location;
             let departureTime = new Date(selectedEvents[currentTripIndex].time.split(" to ")[1]);
             initDynamicMap(startLocation, endLocation, departureTime);
+            refreshNavigationButtons();
         }
-        refreshNavigationButtons();
     }
     
     function updateTravelTimes() {
