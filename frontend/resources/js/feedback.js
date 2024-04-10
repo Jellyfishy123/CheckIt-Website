@@ -2,8 +2,25 @@ import firebaseConfig from './models/firebaseConfig.js';
 import feedbackService from './service/feedbackService.js';
 
 document.getElementById('feedbackForm').addEventListener('submit', () => {
-    addFeedback();
-    resetFormFields();
+    const feedbackText = document.querySelector("#newFeedback").value;
+
+    try {
+        if (!feedbackText) {
+            throw new Error("Empty feedback forms not allowed.");
+        }
+
+        addFeedback();
+        resetFormFields();
+
+    } catch (error) {
+        console.error(`Validation error: ${error.message}`);
+        const errorMessage = document.querySelector("#errorMessage");
+        errorMessage.textContent = error.message;
+        errorMessage.style.display = "block";
+
+        // console.log("task not added"); //for debugging
+    }
+
 });
 
 const getCurrentUserId = () => {
@@ -36,4 +53,6 @@ const resetFormFields = () => {
     const feedbackTextarea = document.querySelector("#newFeedback");
 
     feedbackTextarea.value = '';
+        
+    errorMessage.textContent = '';
 }
