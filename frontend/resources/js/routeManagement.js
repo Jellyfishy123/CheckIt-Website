@@ -166,22 +166,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     confirmBtn.addEventListener('click', () => {
-        // First, ensure the selected events are up to date
         updateEventsList();
-    
+
         // Check if each selected event has both start and end times set
-        const allTimesSet = selectedEvents.every(event => 
-            event.startTime && event.endTime
-        );
+        const allTimesSet = selectedEvents.every(event => event.startTime && event.endTime);
         console.log('Start time for all tasks: ', selectedEvents.every.startTime);
-    
+
         if (!allTimesSet) {
             window.alert("Please ensure all selected tasks have both start and end times set.");
-            return; 
+            return;
         }
-    
+
+        // Check if any selected event has startTime later than endTime
+        const timeOrderCorrect = selectedEvents.every(event => {
+            const [startHour, startMinute] = event.startTime.split(':').map(Number);
+            const [endHour, endMinute] = event.endTime.split(':').map(Number);
+            const startTime = startHour * 60 + startMinute;
+            const endTime = endHour * 60 + endMinute;
+            return startTime < endTime;
+        });
+
+        if (!timeOrderCorrect) {
+            window.alert("One or more selected tasks have start times later than end times. Please correct them.");
+            return;
+        }
+
         if (selectedEvents.length >= 2) {
-            // If all times are set and there are at least two events, proceed with the process
+            // If all times are set properly and there are at least two events, proceed with the process
             updateTravelTimes();
             taskSelectionView.classList.add('hidden');
             itineraryView.classList.remove('hidden');
@@ -191,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.alert("Please select at least two events to plan your route.");
         }
     });
+
     
     
 
