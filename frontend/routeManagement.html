@@ -26,27 +26,37 @@
     <!-- Task Selection View -->
     <main id="task-selection-view">
         <h1 class="selector-header"><span>Select tasks to plan your route!</span></h1>
-        <div class="task-flex-container">
-            <div class="task-selector">
-                <div class="task-header">
-                    <label class="task-checkbox">
-                        <input type="checkbox" id="allTask" name="allTask">
-                        <span class="checkmark"></span>
-                        <h2>All Tasks</h2>
-                </div>
-                <div class="task-list" id="taskList">
-                    <!-- Dynamically generated tasks will be inserted here -->
-                </div>
-                <button id="confirm-btn">CONFIRM</button>
+        <div class="task-selector">
+            <div class="task-header">
+                <label class="task-checkbox">
+                    <input type="checkbox" id="allTask" name="allTask">
+                    <span class="checkmark"></span>
+                    <h2>All Tasks</h2>
             </div>
-            <p class="task-paragraph"><span>The tasks with a flexible time will be given an optimal time according to
-                    our algorithm.</span></p>
+            <div class="task-list" id="taskList">
+                <!-- Dynamically generated tasks will be inserted here -->
+            </div>
+            <button id="confirm-btn">CONFIRM</button>
         </div>
     </main>
 
 
+    <!--Map View-->
+    <main id="map-view" class="hidden">
+        <button id="back-button" class="back-btn">Go Back</button>
+        <div id="dynamicMapContainer" class="map-container"></div>
+        <div id="details">
+            <div id="dynamicDirectionsPanel" class="directions-panel"></div>
+            <div id="switch-route">
+                <button id="previous-trip">PREV TRIP</button>
+                <button id="next-trip">NEXT TRIP</button>
+            </div>
+        </div>
+    </main>
+
     <!-- Itinerary View -->
     <main id="itinerary-view" class="hidden">
+        <h1 class="selector-header"><span>Today's plan is ready!</span></h1>
         <section id="itinerary">
             <!-- This section will be populated with the itinerary items by JavaScript -->
         </section>
@@ -54,9 +64,11 @@
             <button id="view-route">VIEW ROUTE</button>
             <button id="change-plan">CHANGE PLAN</button>
         </div>
-        <div id="route-details"></div>
-        <div id="switch-route"></div>
     </main>
+
+    
+
+
 
     <script type="module" src="./resources/js/routeManagement.js"></script>
     <script>
@@ -67,6 +79,9 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDjW3C5ns4wVqaYulzv-4e6aAKco2BYug&callback=initMap">
     </script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
 </body>
 

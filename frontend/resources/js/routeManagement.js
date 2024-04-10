@@ -12,8 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmBtn = document.getElementById('confirm-btn');
     const taskSelectionView = document.getElementById('task-selection-view');
     const itineraryView = document.getElementById('itinerary-view');
+    const mapView = document.getElementById('map-view'); 
     const allTasksCheckbox = document.getElementById('allTask');
-    const routeDetailsSection = document.getElementById('route-details');
+    const directionsPanel = document.getElementById("dynamicDirectionsPanel");
+    const dynamicMapContainer = document.getElementById("dynamicMapContainer");
+    const backButton = document.getElementById('back-button');
+    const switchRoute = document.getElementById('switch-route');
+    const previousTripButton = document.getElementById('previous-trip');
+    const nextTripButton = document.getElementById('next-trip');
 
     let currentTripIndex = 0;
     let items = [];
@@ -21,11 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedEvents = [];
     let tripsBetweenEvents = [];
 
+
     // Retrieve tasks from database
-    
     tasksService.getAllTasks().then(fetchedItems => {
         const uid = getCurrentUserId();
-        items = fetchedItems.filter(item => item.userID === uid);
+        const now = new Date(); // Get the current time
+    
+        items = fetchedItems.filter(item => {
+            // Ensure the user ID matches and the current time is within the task's start and end times
+            const startDT = new Date(item.startDT);
+            const endDT = new Date(item.endDT);
+            return item.userID === uid && now >= startDT && now <= endDT;
+        });
     
         allEvents = items.map(item => {
             return {
@@ -38,32 +51,108 @@ document.addEventListener('DOMContentLoaded', () => {
         generateTaskCheckboxes(allEvents);
     });
     
+    const timepicker = (selector, eventIndex, isStartTime) => {
+        flatpickr(selector, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i", // Format adjusted to store only time
+            allowInput: false,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr) {
+                // Since dateStr is in "H:i" format, it only contains the time part
+                if (isStartTime) {
+                    // Update the start time for the event at eventIndex
+                    allEvents[eventIndex].startTime = dateStr;
+                } else {
+                    // Update the end time for the event at eventIndex
+                    allEvents[eventIndex].endTime = dateStr;
+                }
+            }
+        });
+    };
+    
     
 
     function generateTaskCheckboxes(events) {
         const taskList = document.getElementById('taskList');
-        taskList.innerHTML = ''; 
+        taskList.innerHTML = '';
         events.forEach((event, index) => {
+            // Container for the entire task item.
+            const taskItem = document.createElement('div');
+            taskItem.className = 'task-item';
+    
+            // Label that acts as a clickable area for the checkbox.
             const label = document.createElement('label');
             label.className = 'task-checkbox';
+            label.setAttribute('for', `task-${index}`);
     
+            // Actual checkbox input.
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.id = `task-${index}`;
             checkbox.name = 'task';
             checkbox.setAttribute('data-index', index);
-    
+
             checkbox.addEventListener('change', updateMasterCheckbox);
     
+            // Custom checkmark span.
             const checkmark = document.createElement('span');
             checkmark.className = 'checkmark';
     
+            // Container for the text.
+            const textFrame = document.createElement('div');
+            textFrame.className = 'text-frame';
             const textNode = document.createTextNode(event.title);
-            label.append(checkbox, checkmark, textNode);
-            taskList.appendChild(label);
+            textFrame.appendChild(textNode);
+    
+            // Assemble the label with the checkbox and text frame.
+            label.appendChild(checkbox);
+            label.appendChild(checkmark);
+            label.appendChild(textFrame);
+    
+            // Container for time selection placed directly within task-item.
+            const timeSelectionContainer = document.createElement('div');
+            timeSelectionContainer.className = 'time-selection-container';
+            
+            const startTimeLabel = document.createElement('div');
+            startTimeLabel.textContent = 'Start Time:';
+            startTimeLabel.className = 'input-instruction';
+
+            // Start time input.
+            const startTimeInput = document.createElement('input');
+            startTimeInput.className = 'time-input';
+            startTimeInput.id = `start-time-${index}`;
+            
+            const endTimeLabel = document.createElement('div');
+            endTimeLabel.textContent = 'End Time:';
+            endTimeLabel.className = 'input-instruction';
+
+            // End time input.
+            const endTimeInput = document.createElement('input');
+            endTimeInput.className = 'time-input';
+            endTimeInput.id = `end-time-${index}`;
+    
+            // Append time inputs to their container.
+            timeSelectionContainer.appendChild(startTimeLabel);
+            timeSelectionContainer.appendChild(startTimeInput);
+            timeSelectionContainer.appendChild(endTimeLabel);
+            timeSelectionContainer.appendChild(endTimeInput);
+            
+    
+            // Append label and time selection container to taskItem.
+            taskItem.appendChild(label);
+            taskItem.appendChild(timeSelectionContainer);
+    
+            // Append the task item to the list.
+            taskList.appendChild(taskItem);
+    
+            // Initialize Flatpickr on the time inputs.
+            timepicker(`#start-time-${index}`, index, true); // Corrected to pass 'index' as 'eventIndex'
+            timepicker(`#end-time-${index}`, index, false); // Corrected to pass 'index' as 'eventIndex'
         });
     }
-
+    
+    
     function updateMasterCheckbox() {
         const allCheckboxes = document.querySelectorAll('#taskList input[type="checkbox"][name="task"]');
         const selectedCheckboxes = document.querySelectorAll('#taskList input[type="checkbox"][name="task"]:checked');
@@ -77,24 +166,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     confirmBtn.addEventListener('click', () => {
+        // First, ensure the selected events are up to date
         updateEventsList();
-        console.log('Confirmed events:', selectedEvents);
+    
+        // Check if each selected event has both start and end times set
+        const allTimesSet = selectedEvents.every(event => 
+            event.startTime && event.endTime
+        );
+        console.log('Start time for all tasks: ', selectedEvents.every.startTime);
+    
+        if (!allTimesSet) {
+            window.alert("Please ensure all selected tasks have both start and end times set.");
+            return; 
+        }
+    
         if (selectedEvents.length >= 2) {
+            // If all times are set and there are at least two events, proceed with the process
             updateTravelTimes();
             taskSelectionView.classList.add('hidden');
             itineraryView.classList.remove('hidden');
             displayItinerary(selectedEvents);
         } else {
-            // If there are less than two selected events, alert the user
-            alert("Please select at least two events to plan your route.");
+            // If there are less than two selected events, inform the user
+            window.alert("Please select at least two events to plan your route.");
         }
     });
+    
+    
 
     changePlanButton.addEventListener('click', () => {
         taskSelectionView.classList.remove('hidden');
         itineraryView.classList.add('hidden');
-        routeDetailsSection.innerHTML = '';
-        document.getElementById('switch-route').innerHTML = '';
     });
 
 
@@ -110,26 +212,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 return null; 
             }
         }).filter(event => event !== null); // Filter out invalid entries
-            
-        // Sort the selectedEvents array based on the start time
-        selectedEvents.sort((a, b) => {
-            // Extract the start times
-            const startTimeA = new Date(a.time.split(" to ")[0]);
-            const startTimeB = new Date(b.time.split(" to ")[0]);
     
-            return startTimeA - startTimeB;
+        // Check if any of the selected events do not have a startTime defined
+        const allStartTimesDefined = selectedEvents.every(event => event.startTime !== undefined && event.startTime !== '');
+    
+        if (!allStartTimesDefined) {
+            return; // Prevent the function from proceeding further
+        }
+    
+        // If all start times are defined, proceed to sort the selectedEvents array based on the start time
+        selectedEvents.sort((a, b) => {
+            const [hourA, minuteA] = a.startTime.split(':').map(Number);
+            const [hourB, minuteB] = b.startTime.split(':').map(Number);
+    
+            // Convert times to minutes for comparison
+            const minutesA = hourA * 60 + minuteA;
+            const minutesB = hourB * 60 + minuteB;
+    
+            return minutesA - minutesB;
         });
     
         console.log('Updated selected events:', selectedEvents);
     }
     
+    
+    
 
     function displayItinerary(eventsToShow) {
         let content = '';
+        content += `<div class = "table-header">
+                        <div class = "todo-duration">Todo Duration</div>
+                        <div class = "travel-time-display">Travel Time</div>
+                        <div class = "todo">Todos</div>
+                    </div>`
         eventsToShow.forEach((event, index) => {
+            const timeRange = `${event.startTime} to ${event.endTime}`;
             content += `
                 <div class="event">
-                    <div class="time">${event.time}</div>
+                    <div class="time">${timeRange}</div>
                     <div class="title">${event.title}</div>
                 </div>
             `;
@@ -140,8 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('display trips now');
                     content += `
                         <div class="trip">
+                            <div class="dots">.............</div>
                             <img class="transport-icon" src="./resources/images/transport.jpg">
                             <div class="travel-time">${trip.travelTime}</div>
+                            <div class="dots">.............</div>
                         </div>
                     `;
                 }
@@ -157,22 +279,14 @@ document.addEventListener('DOMContentLoaded', () => {
     viewRouteButton.addEventListener('click', () => {
         console.log('View Route button clicked');
         console.log('Selected events:', selectedEvents);
-        if (selectedEvents.length > 1) { // Ensure there are at least two events for a trip
-            let routeContent = `
-                <div class="route-description">
-                    <div id="dynamicMapContainer" class="map-container"></div>
-                    <div id="dynamicDirectionsPanel" class="directions-panel"></div>
-            </div>
-            `;
-            routeDetailsSection.innerHTML = routeContent;
-            
+        
+        if (selectedEvents.length > 1) {
+            itineraryView.classList.add('hidden');
+            mapView.classList.remove('hidden');
+
             if(selectedEvents.length > 2){
-                let buttonContent = `
-                <button id="previous-trip">PREVIOUS TRIP</button>
-                <button id="next-trip">NEXT TRIP</button>
-                `;
-                document.getElementById('switch-route').innerHTML = buttonContent;
-                document.getElementById('next-trip').addEventListener('click', () => {
+                switchRoute.classList.remove('hidden');
+                nextTripButton.addEventListener('click', () => {
                     if (currentTripIndex < selectedEvents.length - 1) {
                         currentTripIndex++;
                         updateMapForCurrentTrip();
@@ -180,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             
-                document.getElementById('previous-trip').addEventListener('click', () => {
+                previousTripButton.addEventListener('click', () => {
                     if (currentTripIndex > 0) {
                         currentTripIndex--;
                         updateMapForCurrentTrip();
@@ -188,21 +302,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             }else{
-                document.getElementById('switch-route').innerHTML ='';
+                switchRoute.classList.add('hidden');
             }
 
-            // Initialize the map for the first trip
+            // Initialize the map for the first trip, add event listeners for new buttons, etc.
+            // Make sure to use unique IDs or manage dynamically created elements appropriately.
             currentTripIndex = 0;
             updateMapForCurrentTrip();
         }
     });
 
+
+    backButton.addEventListener('click', function() {
+        mapView.classList.add('hidden'); // Hide the map view
+        itineraryView.classList.remove('hidden'); // Show the itinerary view
+    });
+    
+
     function refreshNavigationButtons() {
         const hasPrevious = currentTripIndex > 0;
         const hasNext = currentTripIndex < selectedEvents.length - 2;
     
-        const previousTripButton = document.getElementById('previous-trip');
-        const nextTripButton = document.getElementById('next-trip');
     
         // Enable or disable the "Previous Trip" button
         if (hasPrevious) {
@@ -228,9 +348,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedEvents.length > 1 && currentTripIndex < selectedEvents.length - 1) {
             const startLocation = selectedEvents[currentTripIndex].location;
             const endLocation = selectedEvents[currentTripIndex + 1].location;
-            let departureTime = new Date(selectedEvents[currentTripIndex].time.split(" to ")[1]);
+            // Today's date components
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth(); // Note: January is 0
+            const day = today.getDate();
+
+            // Extract hour and minute from endTime
+            const [hour, minute] = selectedEvents[currentTripIndex].endTime.split(":").map(Number);
+
+            // Combine today's date with the event's endTime
+            let departureTime = new Date(year, month, day, hour, minute);
+
+            console.log("Calculated departureTime is:", departureTime);
+
             initDynamicMap(startLocation, endLocation, departureTime);
-            refreshNavigationButtons();
+            if(selectedEvents.length > 2) refreshNavigationButtons();
         }
     }
     
@@ -313,9 +446,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initDynamicMap(start, end, departureTime) {
         console.log('initDynamicMap called with:', start, end);
-        const directionsPanel = document.getElementById("dynamicDirectionsPanel");
         directionsPanel.innerHTML = ''; // Clear existing directions
-        const map = new google.maps.Map(document.getElementById("dynamicMapContainer"), {
+        const map = new google.maps.Map(dynamicMapContainer, {
             zoom: 12,
             center: { lat: 1.3483, lng: 103.6831 }, // Center map based on general Singapore area
             disableDefaultUI: true,
@@ -323,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(map);
-        directionsRenderer.setPanel(document.getElementById("dynamicDirectionsPanel"));
+        directionsRenderer.setPanel(directionsPanel);
         displayRoute(directionsRenderer, start, end, departureTime);
     }
     
