@@ -14,9 +14,10 @@ document.getElementById('taskForm').addEventListener('submit', (event) => {
     const endDT = document.querySelector("#newTaskEndDT").value;
 
     const title = document.querySelector("#newTaskTitle").value;
+    const location = document.querySelector("#newTaskLocation").value;
 
     try {
-        if (!title || !startDT || !endDT) {
+        if (!title || !startDT || !endDT || !location) {
             throw new Error("Please fill in all required fields (*).");
         }
         if (validateDatesAndDisplayError(startDT, endDT)) {
@@ -401,6 +402,7 @@ const showWeather = async () => {
     weatherText.style.fontStyle = 'normal';
     weatherText.style.color = '#676767';
     weatherText.style.marginTop = '0px';
+    weatherText.style.fontSize = '1.5rem';
     weathercontent.appendChild(weatherText);
 
     const weatherIcon = document.createElement('img');
@@ -617,9 +619,10 @@ const editTaskView = (task) => {
         const endDT = document.querySelector("#newTaskEndDT").value;
 
         const title = document.querySelector("#newTaskTitle").value;
+        const location = document.querySelector("#newTaskLocation").value;
 
         try {
-            if (!title || !startDT || !endDT) {
+            if (!title || !startDT || !endDT || !location) {
                 throw new Error("Please fill in all required fields (*).");
             }
             if (validateDatesAndDisplayError(startDT, endDT)) {

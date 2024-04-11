@@ -66,114 +66,290 @@ body, h1, h2, h3, p {
     cursor: pointer;
     font-size: 18px;
   }
-  
-  main {
-    padding-top: 60px; /* Give space for fixed header */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  #itinerary {
-    background-color:#C8DEF2;
-    padding: 20px;
-    width: 80%;
-    max-width: 1000px;
-    margin: 20px auto;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    position: relative;
-  }
-  
-  .event {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #e6e6e6;
-    padding: 15px 0;
-    margin-left: 0%;
-    margin-right: 0%;
-  }
-  
-  .trip {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px; /* Adjust the space between the elements as needed */
-  }
 
-  .transport-icon {
-    float: right;
-    width: 30px;
-  }
-  
-
-  .event:last-child {
-    border-bottom: none;
-  }
-  
-
-  .time {
-    font-size: 16px;
-    color: #555;
-    text-align: left;
-  }
-  
-  .description {
-    font-weight: bold;
-  }
-  
-  .travel-time {
-    background-color: #e6e6e6;
-    border-radius: 15px;
-    padding: 5px 15px;
-    font-size: 14px;
-    margin-left: auto;
+  .task-item {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-    margin: 0%;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  #controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  #controls button {
-    background-color: #007bff;
-    border: none;
+    align-items: center; /* Align the checkbox and the text frame vertically */
+    margin-bottom: 10px; /* Space between each task item */
+}
+
+.task-checkbox {
+    color: #FFFFFF;
+    align-items: center; /* Centers the checkbox vertically */
+}
+
+.text-frame {
+    border: 1px solid #ffc9c9; /* White border for the frame */
+    width: 380px;
+    margin-left: 8px; /* Space between the checkbox and the text frame */
+    padding: 8px; /* Padding inside the frame */
+    background-color: #ffffff; /* White background for the frame */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+    color: #333333; 
+    font-family: 'Roboto Mono', monospace;
+    font-size: 18px;
     border-radius: 5px;
-    padding: 10px 15px;
-    color: white;
-    margin: 0 10px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  #controls button:hover {
-    background-color: #0056b3;
-  }
-  
-  #details {
-    width: 80%;
-    max-width: 1000px;
-    margin: 20px auto;
-    display: flex;
-    justify-content: space-between;
-  }
+    margin-right: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.time-selection-container {
+  display: flex;
+  flex-direction: row;
+  margin: 0px 10px 10px 8px;
+  width: 420px;
+  height: 45px;
+  justify-content: start;
+  position: relative;
+}
+
+.input-instruction {
+  font-family: 'Roboto Mono', monospace;
+  display: flex; /* Turn this element into a flex container */
+  align-items: center; /* Vertically center the flex container's children */
+  justify-content: center; /* Horizontally center the flex container's children, if needed */
+  font-size: 15px;
+  width: 120px; /* Adjust width as necessary */
+  height: 45px; /* Adjust height as necessary */
+}
+
+.time-input {
+  margin-left: 10px;
+  cursor: pointer; /* Indicate these fields are clickable */
+  padding: 8px;
+  width: 100px;
+  height: 45px;
+  background-color: #ffffff; /* White background for the frame */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ffc9c9;
+  color: #333333; 
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  border-radius: 5px;
+  margin-right: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#itinerary-view {
+  background-color: #f2f9ff; /* Light blue background */
+  border-radius: 20px;
+  width: 80%;
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#map-view {
+  background-color: #f2f9ff; /* Light blue background */
+  border-radius: 20px;
+  width: 95%;
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  flex-direction: row;
+  position: relative;
+}
+
+#dynamicMapContainer {
+  flex-basis: 80%;
+  /* Ensure the map container has a height, or it won't display */
+  height: 410px; /* Example height, adjust as necessary */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid white;
+}
+
+#details {
+  flex-basis: 40%; 
+  display: flex;
+  flex-direction: column; /* Stacks the directions panel and switch-route vertically */
+  background-color: #C8DEF2;; 
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: auto 50px;
+  border: 3px solid white;
+}
+
+#dynamicDirectionsPanel {
+  /* You might want to set a specific flex-basis if you want to control its size relative to switch-route */
+  flex-grow: 1; /* Allows it to grow and fill the space */
+}
+
+main {
+  padding-top: 60px; /* Give space for fixed header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.event-header span {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 1.5em;
+  font-weight: medium;
+  color: #9ABCDB;
+  text-align: center;
+}
+
+#itinerary {
+  background-color:#C8DEF2;
+  padding: 20px;
+  width: 80%;
+  max-width: 1000px;
+  margin: 20px auto;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  position: relative;
+}
+
+.table-header {
+  display: flex; /* Use Flexbox */
+  justify-content: space-between; /* Distributes space evenly */
+}
+
+.table-header > div {
+  flex: 1; /* Each child div will grow equally to fill the container */
+  text-align: center; /* Center text horizontally within each child div */
+  padding: 10px; /* Optional: Adds some padding inside each child div */
+  font-size: 25px;
+  font-family: 'Roboto Mono', monospace;
+  color: #ffffff;
+}
+
+
+.event {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+  margin-left: 0%;
+  margin-right: 0%;
+}
+
+
+.dots {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.trip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; /* Adjust the space between the elements as needed */
+}
+
+.transport-icon {
+  float: right;
+  width: 30px;
+}
+
+
+.time {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 20px;
+  color: #000000;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 20px;
+  color: #000000;
+  text-align: center;
+}
+
+.description {
+  font-weight: bold;
+}
+
+.travel-time {
+  border-radius: 15px;
+  padding: 5px 15px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 20px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  margin: 0%;
+}
+
+.hidden {
+  display: none;
+}
+
+
+#controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#controls button {
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  color: white;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#controls button:hover {
+  background-color: #0056b3;
+}
+
+
+#switch-route {
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#switch-route button {
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  color: white;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#switch-route button:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* Styling for disabled buttons */
+#switch-route button[disabled] {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+#switch-route button[disabled]:hover {
+  background-color: #cccccc; /* Keep the background color on hover */
+}
+
   
 
   /* Add responsive design */
-  @media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) {
     nav {
       padding: 0 5%;
     }
@@ -200,7 +376,7 @@ body, h1, h2, h3, p {
   width: 100%;
   margin-bottom: 10px;
   }
-  }
+}
 
 
 #task-selection-view {
@@ -215,20 +391,15 @@ body, h1, h2, h3, p {
 
 
 /* Main layout adjustments for task selection */
-.task-flex-container {
-  display: flex; /* Use flexbox to lay out children */
-  justify-content: space-between; /* Space between children */
-  align-items: flex-start; /* Align items to the start of the container */
-  padding: 20px;
-  width: 90%;
-}
 
 .task-header h2 {
+  font-family: 'Roboto Mono', monospace;
   margin-bottom: 20px;
-  font-size: 18px; /* Adjust the font-size as needed */
+  font-size: 30px;
+  color:#333333;
   text-align: center;
   padding-bottom: 10px;
-  border-bottom: 1px solid #FFFFFF; /* Bottom border for the header */
+  border-bottom: 3px solid #000000; /* Bottom border for the header */
 }
 
 .task-selector {
@@ -236,8 +407,9 @@ body, h1, h2, h3, p {
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  width: 650px; /* Adjust the width as needed */
+  width: 900px; /* Adjust the width as needed */
   margin: auto 50px;
+  border: 3px solid white;
 }
 
 .task-paragraph {
@@ -262,8 +434,7 @@ body, h1, h2, h3, p {
   text-align: start;
   font-size: 24px;
   color: #333;
-  padding: 20px; /* Adjust as needed */
-  margin-top: 20px; /* Spacing from the top of the container */
+  padding: 10px; /* Adjust as needed */
 }
 
 .selector-header span {
@@ -395,4 +566,51 @@ body, h1, h2, h3, p {
   max-width: 100%; /* Ensure the image is responsive and does not overflow its container */
   height: auto; /* Maintain aspect ratio */
   border-radius: 8px; /* Optional: Adds rounded corners to your images */
+}
+
+
+.map-container {
+  width: 600px;
+  height: 450px;
+  border-radius: 8px; /* Gives the map container rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the map container */
+  overflow: hidden; /* Ensures no overflow content outside the rounded corners */
+}
+
+
+.directions-panel {
+  overflow-y: auto;
+  max-height: 450px;
+  background-color: #f9f9f9; /* Light background color for the panel */
+  border: 2px solid #e0e0e0; /* Adds a light border */
+  border-radius: 8px; /* Rounded corners for the panel */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  font-family: 'Roboto', sans-serif; /* Uses Roboto font for text */
+}
+
+
+.back-btn {
+  background-color: #5b4caf; /* Green background */
+  color: white; /* White text */
+  padding: 10px 20px; /* Top and bottom padding, left and right padding */
+  border: 1px white;
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Cursor changes to a pointer on hover */
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background color and transform */
+  outline: none; /* Remove outline */
+  font-size: 16px; /* Font size */
+  margin-top: 10px; /* Margin at the top */
+  position: absolute; /* Absolute positioning */
+  top: 1px; /* Position from the top */
+  left: 10px; /* Position from the left */
+  z-index: 10;
+}
+
+.back-btn:hover {
+  background-color: #006aff; /* Darker shade of green on hover */
+  transform: scale(1.05); /* Slightly increase size on hover */
+}
+
+.back-btn:focus {
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1); /* Add a subtle shadow on focus for accessibility */
 }

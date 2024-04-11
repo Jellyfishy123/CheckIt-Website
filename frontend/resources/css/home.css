@@ -136,9 +136,14 @@ body {
 }
 
 #weatherText{
+    font-family: 'Roboto Mono';
+    font-weight: medium;
     font-size: 1.25em;
     text-align: center;
     font-weight: normal;
+}
+#weatherCondition {
+    font-size: 1rem;
 }
 
 #weatherPage {

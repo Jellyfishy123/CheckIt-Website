@@ -13,6 +13,8 @@ const showWeather = async () => {
     weatherImg.src = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}.png`;
     var weatherText = document.getElementById('weatherText');
     weatherText.textContent = textShown;
+    var weatherCond = document.getElementById('weatherCondition');
+    weatherCond.textContent = weatherData.weather[0].description;
     
     return isWeatherImpacted;
 }

@@ -13,9 +13,7 @@ body {
     align-items: center;
     background-image: url('../images/CheckIt_Background.jpg');
     background-size: cover;
-    /* Add this line */
     background-position: center;
-    /* Add this line if you want to center the background image */
     width: 100%;
     height: 100vh;
 }
