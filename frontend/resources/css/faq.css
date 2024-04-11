@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 
+.faq_container {
+    position: absolute;
+    left: 20px; /* Adjust the left distance as needed */
+    top: 50%; /* Adjust the top distance as needed */
+    transform: translateY(-50%);
+}
 
 .faq_question {
     margin: 0px;
