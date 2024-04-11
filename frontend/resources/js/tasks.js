@@ -432,13 +432,20 @@ const showWeatherImpactedTasks = async (item) => {
         const taskDate = new Date(task.endDT);
         taskDate.setHours(0, 0, 0, 0);
 
-        const dueinDays = Math.floor((taskDate - currentDate) / (1000 * 60 * 60 * 24));
+        const startDT = new Date(task.startDT);
+        startDT.setHours(0, 0, 0, 0);
+        const endDT = new Date(task.endDT);
+        endDT.setHours(0, 0, 0, 0);
+
+        console.log(startDT, endDT, currentDate);
 
         const weatherCondition = weatherData.weather[0].main.toLowerCase();
         const weatherConditions = ['light rain', 'rain', 'shower rain', 'thunderstorm'];
         const isWeatherImpacted = weatherConditions.some(condition => weatherCondition.includes(condition));
 
-        if (dueinDays == 0 && isWeatherImpacted) {
+        //if current date is in between the start and end date of the task and weather is impacted then show the task
+        if (currentDate >= startDT && currentDate <= endDT && isWeatherImpacted) {
+            console.log('weather impacted task', task.title);
             const weather = weatherData.weather[0].description;
             const weatherIcon = weatherData.weather[0].icon;
 
@@ -466,7 +473,6 @@ const showWeatherImpactedTasks = async (item) => {
 
 const showDueTasks = async (selectedNum) => {
     const currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
 
     const remainingDays = 7 - currentDate.getDay();
 
@@ -476,7 +482,6 @@ const showDueTasks = async (selectedNum) => {
 
     items.forEach((item) => {
         const dueDate = new Date(item.endDT);
-        dueDate.setHours(0, 0, 0, 0);
 
         let dueinDays = Math.floor((dueDate - currentDate) / (1000 * 60 * 60 * 24));
         if (dueinDays < 0) {
@@ -485,9 +490,9 @@ const showDueTasks = async (selectedNum) => {
 
         if ((selectedNum <= 1 && dueinDays == selectedNum) ||
             (selectedNum == 7 && dueinDays >= 0 && dueinDays <= remainingDays) ||
-            (selectedNum == 14 && dueinDays >= remainingDays && dueinDays <= remainingDays + 7)) {
+            (selectedNum == 14 && dueinDays > remainingDays && dueinDays <= remainingDays + 7)) {
 
-            console.log(dueinDays,remainingDays);
+            console.log(dueinDays, remainingDays);
 
             const dueitemElement = createDiv('w-100 d-flex');
             const dueitemBox = createDiv('rounded w-100 p-2 mx-3 mt-3 position-relative');
