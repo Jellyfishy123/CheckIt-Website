@@ -154,10 +154,11 @@
 .search-result a {
   font-size: 12px;
   text-decoration: none;
-  color: #626262;
+  font-family: "Roboto Mono", monospace;
+  color: #ffffff;
   display: block;
   padding: 10px;
-  background-color: #97c6e1;
+  background-color: #ff4800;
   text-transform: capitalize;
   text-align: center;
 }
