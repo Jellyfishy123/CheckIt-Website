@@ -1,4 +1,3 @@
-
 hr.double {
   border-top: 3px double;
   border-bottom: none;
@@ -158,9 +157,19 @@ body {
 .home-text1 {
   color: #95b9ea;
   font-size: 38px;
-  font-family: "Roboto";
+  font-family: "Roboto Mono", monospace;
   padding-top: 28px;
   padding-left: var(--dl-space-space-twounits);
+
+}
+
+.home-text2 {
+  color: #ea9595;
+  font-size: 20px;
+  font-family: "Roboto Mono", monospace;
+  padding-top: 28px;
+  padding-left: var(--dl-space-space-twounits);
+  display: none;
 }
 .home-container14 {
   flex: 0 0 auto;
@@ -170,13 +179,18 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.search-results{
+  width:894px;
+}
+
 .home-textinput {
   width: 306px;
-  height: 30px;
+  height: 31px;
   align-self: flex-start;
-  margin-top: 25px;
+  margin-top: 20px;
   text-align: center;
-  font-family: "Nunito-LightItalic";
+  font-family: "Roboto Mono";
   margin-left: var(--dl-space-space-twounits);
   border-color: rgba(0, 0, 0, 0.32);
 }
@@ -184,9 +198,9 @@ body {
   width: 260px;
   height: 31px;
   align-self: flex-start;
-  margin-top: 25px;
+  margin-top: 20px;
   text-align: center;
-  font-family: "Nunito-LightItalic";
+  font-family: "Roboto Mono";
   margin-left: var(--dl-space-space-twounits);
   border-color: rgba(0, 0, 0, 0.32);
   margin-right: var(--dl-space-space-twounits);
@@ -195,15 +209,16 @@ body {
   width: 194px;
   height: 31px;
   align-self: flex-start;
-  margin-top: 25px;
+  margin-top: 20px;
   text-align: center;
   font-family: "Nunito-LightItalic";
   margin-left: var(--dl-space-space-twounits);
   border-color: rgba(0, 0, 0, 0.32);
   margin-right: var(--dl-space-space-twounits);
+  display: none;
 }
 .home-container15 {
-  width: 895px;
+  width: 894px;
   height: 387px;
   display: flex;
   margin-top: var(--dl-space-space-twounits);
@@ -245,13 +260,12 @@ body {
   color: #FFFFFF;
   cursor: pointer;
   display: inline-block;
-  font-family: "Roboto";
   width: 194px;
   height: 31px;
   align-self: flex-start;
-  margin-top: 25px;
+  margin-top: 20px;
   text-align: center;
-  font-family: "Nunito-LightItalic";
+  font-family: "Roboto Mono", monospace;
   margin-left: var(--dl-space-space-twounits);
   border-color: rgba(0, 0, 0, 0.32);
   margin-right: var(--dl-space-space-twounits);
