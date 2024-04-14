@@ -22,7 +22,8 @@
             <a class="navbar-brand" href="home.html">CHECKIT</a>
             <nav class="navigation">
                 <a class="faq-btn" href="faq.html">FAQs</a>
-                <button class="signout-button" onclick="localStorage.removeItem('user'); localStorage.removeItem('userId'); window.location.href='login.html';">SignOut</button>
+                <button class="signout-button"
+                    onclick="localStorage.removeItem('user'); localStorage.removeItem('userId'); window.location.href='login.html';">SignOut</button>
             </nav>
         </div>
     </nav>
@@ -74,7 +75,8 @@
                         </div>
                         <div class="mb-3">
                             <i class="fas fa-map-marker-alt"></i>
-                            <label for="newTaskLocation" class="form-label"> <span class="required">*</span> Location: </label>
+                            <label for="newTaskLocation" class="form-label"> <span class="required">*</span> Location:
+                            </label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="newTaskLocation" name="location">
 
@@ -85,7 +87,8 @@
                         <div class="row">
                             <div class="col-lg-4 col-sm-6 ">
                                 <div class="mb-3">
-                                    <label for="newTaskStartDT" class="form-label"> <span class="required">*</span> Start By: </label>
+                                    <label for="newTaskStartDT" class="form-label"> <span class="required">*</span>
+                                        Start By: </label>
                                     <div class="input-group">
                                         <input type="text" class="form-control datetimepicker" id="newTaskStartDT"
                                             name="startDT" readonly>
@@ -98,7 +101,8 @@
 
                             <div class="col-lg-4 col-sm-6">
                                 <div class="mb-3">
-                                    <label for="newTaskEndDT" class="form-label"><span class="required">*</span> End By: </label>
+                                    <label for="newTaskEndDT" class="form-label"><span class="required">*</span> End By:
+                                    </label>
                                     <div class="input-group">
                                         <input type="text" class="form-control datetimepicker" id="newTaskEndDT"
                                             name="endDT" readonly>
@@ -130,6 +134,7 @@
                             </div>
                         </div>
 
+                        <div class="mb-3" id="editMessage" style="display: none; color: #62bd76;"></div>
                         <div class="modal-footer">
                             <input type="submit" class="btn btn-confirm" value="Confirm">
                             <button onclick="resetFormFields()" type="button" class="btn btn-cancel"
@@ -154,8 +159,6 @@
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-
 </body>
 
 </html>

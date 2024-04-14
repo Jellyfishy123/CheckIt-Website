@@ -37,6 +37,12 @@ document.getElementById('taskForm').addEventListener('submit', (event) => {
     }
 });
 
+document.getElementById('staticBackdrop').addEventListener('hidden.bs.modal', () => {
+    const showEditMessage = document.querySelector("#editMessage");
+    showEditMessage.style.display = 'none';
+    console.log('Modal closed');
+});
+
 document.getElementById('newTaskLocation').addEventListener('input', function () {
     const location = this.value;
     LocationService.searchLocation(location)
@@ -109,6 +115,8 @@ const resetFormFields = () => {
     const errorMessage = document.querySelector("#errorMessage");
 
     errorMessage.style.display = "none";
+    const showEditMessage = document.querySelector("#editMessage");
+    showEditMessage.style.display = 'none';
 
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].type === 'submit' || inputs[i].type === 'radio') {
@@ -437,15 +445,12 @@ const showWeatherImpactedTasks = async (item) => {
         const endDT = new Date(task.endDT);
         endDT.setHours(0, 0, 0, 0);
 
-        console.log(startDT, endDT, currentDate);
-
         const weatherCondition = weatherData.weather[0].main.toLowerCase();
-        const weatherConditions = ['light rain', 'rain', 'shower rain', 'thunderstorm'];
+        const weatherConditions = ['drizzle', 'light rain', 'rain', 'shower rain', 'thunderstorm'];
         const isWeatherImpacted = weatherConditions.some(condition => weatherCondition.includes(condition));
 
         //if current date is in between the start and end date of the task and weather is impacted then show the task
         if (currentDate >= startDT && currentDate <= endDT && isWeatherImpacted) {
-            console.log('weather impacted task', task.title);
             const weather = weatherData.weather[0].description;
             const weatherIcon = weatherData.weather[0].icon;
 
@@ -491,8 +496,6 @@ const showDueTasks = async (selectedNum) => {
         if ((selectedNum <= 1 && dueinDays == selectedNum) ||
             (selectedNum == 7 && dueinDays >= 0 && dueinDays <= remainingDays) ||
             (selectedNum == 14 && dueinDays > remainingDays && dueinDays <= remainingDays + 7)) {
-
-            console.log(dueinDays, remainingDays);
 
             const dueitemElement = createDiv('w-100 d-flex');
             const dueitemBox = createDiv('rounded w-100 p-2 mx-3 mt-3 position-relative');
@@ -548,8 +551,11 @@ const viewDetailedTasks = (task) => {
     modalFooter.append('<button id="editButton" type="button" class="btn btn-confirm">Edit</button>');
 
     $('#editButton').on('click', () => editTaskView(task));
+
     $('#staticBackdrop').on('hidden.bs.modal', () => {
         resetFormFields();
+        const showEditMessage = document.querySelector("#editMessage");
+        showEditMessage.style.display = 'none';
 
         const modalFooter = $('.modal-footer');
         modalFooter.empty();
@@ -646,6 +652,8 @@ const editTaskView = (task) => {
         }
     });
     $('#cancelButton').on('click', () => {
+        const showEditMessage = document.querySelector("#editMessage");
+        showEditMessage.style.display = 'none';
         viewDetailedTasks(task);
     });
 }
@@ -665,6 +673,10 @@ const confirmEditTasks = async (task) => {
     }
 
     console.log(task);
+    //add message in form to show task is edited successfully
+    const showEditMessage = document.querySelector("#editMessage");
+    showEditMessage.textContent = 'Task edited successfully!';
+    showEditMessage.style.display = 'block';
 
     await tasksService.updateTask(task);
     viewDetailedTasks(task);
@@ -672,12 +684,19 @@ const confirmEditTasks = async (task) => {
 }
 
 const deleteTasks = async () => {
+    const checked = false;
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
     checkboxes.forEach(async (checkbox) => {
         if (checkbox.id == 'selectAll') return;
 
         await tasksService.deleteTask(checkbox.value);
+
     });
+
+    //if no task is selected, alert user
+    if (checkboxes.length === 0) {
+        alert('Error: No task(s) selected!');
+    }
 
     showTasks();
 };
