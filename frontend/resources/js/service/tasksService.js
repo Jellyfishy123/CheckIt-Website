@@ -9,7 +9,7 @@ const getAllTasks = async () => {
         snapshot.forEach((childSnapshot) => {
             const id = childSnapshot.key;
             const data = childSnapshot.val();
-            items.push({id: id, ...data});
+            items.push({ id: id, ...data });
         });
     }).catch((error) => {
         console.error(error);
@@ -21,6 +21,7 @@ const getAllTasks = async () => {
 const addTask = async (task) => {
     await push(tasksRef, task).then(() => {
         console.log('Task added');
+        console.log('Task name:', task.title);
     }).catch((error) => {
         console.error(error);
     });
@@ -28,15 +29,17 @@ const addTask = async (task) => {
 
 const deleteTask = async (id) => {
     const childRef = child(tasksRef, id);
+    //if no id is provided, alert user
     remove(childRef).then(() => {
         console.log('Task deleted');
+        alert('Task(s) Deleted Succefully!');
     }).catch((error) => {
         console.error(`Error removing ${id}`, error);
     });
 };
 
 const updateTask = async (task) => {
-    const taskClone = {...task};
+    const taskClone = { ...task };
     const childRef = child(tasksRef, taskClone.id);
 
     delete taskClone.id;
